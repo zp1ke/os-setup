@@ -1,24 +1,24 @@
 # Terminal Setup
 
-## 1. Install FiraCode Nerd Font
+## Install FiraCode Nerd Font
 
-Download [FiraCode.zip](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip), extract, and install the fonts.
+Download [FiraCode.zip](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip), extract, and install fonts.
 
-## 2. Install Starship
+## Install Starship
 
 ```shell
 winget install --id Starship.Starship
 ```
 
-See [installation guide](https://starship.rs/guide/) and [configuration docs](https://starship.rs/config/) for customization.
+See [installation](https://starship.rs/guide/) and [configuration](https://starship.rs/config/) docs.
 
-## 3. Install Eza
+## Install Eza
 
 ```shell
 winget install eza-community.eza
 ```
 
-Add to your PowerShell profile (`$PROFILE`):
+Add to PowerShell profile (`$PROFILE`):
 
 ```powershell
 Remove-Item Alias:ls -ErrorAction SilentlyContinue
