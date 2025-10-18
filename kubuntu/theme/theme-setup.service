@@ -1,0 +1,12 @@
+[Unit]
+Description=Theme Setup Service
+Wants=plasma-workspace.target graphical-session.target
+After=plasma-workspace.target graphical-session.target
+PartOf=plasma-workspace.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash PATH_TO_theme_FOLDER/theme-setup.sh
+
+[Install]
+WantedBy=plasma-workspace.target
