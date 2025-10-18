@@ -1,0 +1,9 @@
+# TIME(HHmm)  MODE   SCOPE(optional=both)
+# MODE: light|dark (also accepts on/off, 1/0, day/night)
+# SCOPE: apps | system | both
+0700 light both
+0830 light apps
+1800 dark
+2130 dark system
+# Overnight ensure full dark
+2300 dark both
