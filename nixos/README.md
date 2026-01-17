@@ -1,0 +1,148 @@
+# NixOS Configuration
+
+A minimal yet powerful NixOS configuration featuring KDE Plasma 6, ZSH with modern terminal tools, and essential development utilities. This setup is designed for both Virtual Machines and bare metal (with optional Nvidia support).
+
+## Features
+
+- **Desktop Environment**: KDE Plasma 6 (via SDDM with Wayland).
+- **Shell**: ZSH enhanced with Oh-My-Zsh, autosuggestions, and syntax highlighting.
+- **Terminal Modernization**:
+  - `starship`: Customizable prompt.
+  - `eza`: Modern replacement for `ls` with icons.
+  - `bat`: Modern replacement for `cat` with syntax highlighting.
+  - `zoxide`: Smarter `cd`.
+  - `ripgrep`, `fd`, `fzf` for fast searching.
+- **Software**: Microsoft Edge, VS Code, Btop.
+- **Hardware Config**: Includes specific settings for UEFI boot and optional proprietary Nvidia drivers.
+
+## Installation
+
+### 1. Boot Environment
+Boot into your NixOS installer image (VM or Physical Hardware).
+
+### 2. Partition & Mount (Fresh Install Only)
+**Skip this if you are upgrading an existing system.**
+
+For a standard UEFI system (common in VirtualBox/VMware):
+
+1. **Check Disk Name**:
+   ```bash
+   lsblk  # Identifies disks (usually 'sda', 'vda', or 'nvme0n1')
+   ```
+
+2. **Partition Disk**:
+   ```bash
+   sudo cfdisk /dev/sda  # Replace 'sda' with your drive
+   ```
+   - Select **gpt** label type.
+   - Create **New** 512M partition -> Type: **EFI System**.
+   - Create **New** 4G partition -> Type: **Linux swap**.
+   - Create **New** partition (Rest) -> Type: **Linux filesystem**.
+   - Select **Write** (type `yes`) -> **Quit**.
+
+3. **Format & Mount**:
+   ```bash
+   # Format Boot Partition
+   sudo mkfs.fat -F 32 /dev/sda1
+
+   # Setup Swap
+   sudo mkswap /dev/sda2
+   sudo swapon /dev/sda2
+
+   # Format & Mount Root
+   sudo mkfs.ext4 /dev/sda3
+   sudo mount /dev/sda3 /mnt
+   sudo mkdir /mnt/boot
+   sudo mount /dev/sda1 /mnt/boot
+   ```
+
+### 3. Generate Configuration
+Once disks are mounted to `/mnt`:
+```bash
+sudo nixos-generate-config --root /mnt
+```
+This generates configuration files in `/mnt/etc/nixos/`. **Do not overwrite `hardware-configuration.nix` with the file from this repo unless you are sure.**
+
+### 4. Apply Configuration
+Replace the default `configuration.nix` with the one provided in this directory.
+
+#### Option A: Copy/Paste (If Clipboard Works)
+```bash
+sudo nano /mnt/etc/nixos/configuration.nix
+# Paste the content of configuration.nix here
+```
+
+#### Option B: Transfer via SSH (If Paste Fails)
+If VirtualBox/VMware clipboard sharing isn't working:
+
+1. **In the VM**:
+   ```bash
+   sudo passwd nixos        # Set a temporary password (e.g., "nixos")
+   sudo systemctl start sshd # Start the SSH server
+   ip addr                  # Note your IP address (e.g., 192.168.x.x)
+   ```
+
+   > **Troubleshooting: IP is 10.0.2.15?**
+   > This is the default NAT IP and is not reachable from your host.
+   > **Fix:** In the VirtualBox window menu, go to **Devices > Network > Network Settings > Advanced > Port Forwarding**. Add a new rule:
+   > - **Protocol**: TCP
+   > - **Host Port**: `2222`
+   > - **Guest Port**: `22` (Leave IPs blank)
+
+2. **On your Host Machine**:
+   Open a terminal in this project folder and run the command matching your network setup:
+
+   **If you used Port Forwarding (IP was 10.0.2.15):**
+   ```powershell
+   scp -P 2222 nixos/configuration.nix nixos@localhost:~/
+   ```
+
+   **If using Bridged Adapter (IP is 192.168.x.x):**
+   ```powershell
+   scp nixos/configuration.nix nixos@<VM_IP>:~/
+   ```
+
+3. **In the VM**:
+   Move the file to the correct location:
+   ```bash
+   sudo mv ~/configuration.nix /mnt/etc/nixos/configuration.nix
+   ```
+
+### 5. Customization Required
+Before applying, open the config and change the following:
+```bash
+sudo nano /mnt/etc/nixos/configuration.nix
+```
+
+- **Nvidia Drivers**:
+  - **VM**: Keep Section 4 commented out.
+  - **Real Hardware**: Uncomment Section 4 if you have an Nvidia GPU.
+
+### 6. Install or Rebuild
+**Choose the correct command for your situation:**
+
+**Option A: Fresh Installation (From Live ISO)**
+If you are installing NixOS to your hard drive for the first time:
+```bash
+sudo nixos-install
+```
+> **Getting "No space left on device"?**
+> You are likely trying to build purely in the Live ISO's RAM. Ensure you have partitioned your disks and mounted them to `/mnt`, and make sure your `configuration.nix` is saved in `/mnt/etc/nixos/` not `/etc/nixos/`.
+
+**Option B: Updating an Existing System**
+If you are already running NixOS and just applying changes:
+```bash
+sudo nixos-rebuild switch
+```
+
+### 7. Reboot
+```bash
+reboot
+```
+
+## Included Aliases
+
+The configuration includes several ZSH aliases for convenience:
+
+- `ls`, `ll`, `la` -> Mapped to `eza` (icons, git status, directories first).
+- `cat` -> Mapped to `bat` (plain style).
