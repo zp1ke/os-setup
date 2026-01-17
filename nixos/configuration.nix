@@ -73,6 +73,7 @@
     tree
 
     # Terminal "Cool Factor" Tools
+    starship         # The Prompt
     eza              # Modern replacement for 'ls' (adds icons/colors)
     bat              # Modern replacement for 'cat' (adds syntax highlighting)
     zoxide           # Smarter 'cd' command
@@ -84,6 +85,11 @@
     microsoft-edge   # Browser with Workspaces support
     bibata-cursors   # Modern cursor theme
     vscode           # Editor
+    brightnessctl    # For reading/setting screen brightness
+
+    # KDE Tools (Required for theme scripts)
+    kdePackages.qttools # For qdbus6
+    kdePackages.kconfig # For kwriteconfig6
   ];
 
   # --- 7. FONTS (Required for Icons) ---
@@ -94,8 +100,25 @@
   # --- 8. STARSHIP CONFIGURATION (The Prompt) ---
   programs.starship = {
     enable = true;
-    # Custom settings
     settings = {
+      # Tokyo Night inspired palette
+      palette = "tokyo_night";
+      palettes.tokyo_night = {
+        red = "#f7768e";
+        orange = "#ff9e64";
+        yellow = "#e0af68";
+        green = "#9ece6a";
+        blue = "#7aa2f7";
+        purple = "#bb9af7";
+        cyan = "#7dcfff";
+        white = "#a9b1d6";
+        bg = "#1a1b26";
+      };
+
+      character = {
+        success_symbol = "[➜](bold green)";
+        error_symbol = "[➜](bold red)";
+      };
     };
   };
 
@@ -160,4 +183,46 @@
 
   # --- 11. SYSTEM STATE ---
   system.stateVersion = "25.11";
-}
+
+  # --- 12. AUTOMATED TASK: AUTO KONSOLE THEME ---
+  systemd.user.services.auto-konsole-theme = {
+    description = "Auto-switch Konsole theme based on brightness";
+    serviceConfig.Type = "oneshot";
+    # Ensure the script can find these commands
+    path = with pkgs; [
+      bash
+      brightnessctl
+      gnugrep
+      kdePackages.qttools # for qdbus6
+      kdePackages.kconfig # for kwriteconfig6
+    ];
+    script = builtins.readFile ./scripts/auto-konsole-theme.sh;
+  };
+
+  systemd.user.timers.auto-konsole-theme = {
+    wantedBy = [ "timers.target" ];
+    partOf = [ "auto-konsole-theme.service" ];
+    timerConfig = {
+      OnCalendar = "*:0/30"; # Run every 30 minutes
+      OnStartupSec = "1s";   # Run immediately after login
+      Unit = "auto-konsole-theme.service";
+    };
+  };
+
+  # --- 13. GENERATE KONSOLE PROFILES ---
+  system.activationScripts.setupKonsoleProfiles = ''
+    mkdir -p /home/zp1ke/.local/share/konsole
+
+    # Write Dark Profile
+    cat > /home/zp1ke/.local/share/konsole/Dark.profile <<EOF
+    ${builtins.readFile ./config/konsole/Dark.profile}
+    EOF
+
+    # Write Light Profile
+    cat > /home/zp1ke/.local/share/konsole/Light.profile <<EOF
+    ${builtins.readFile ./config/konsole/Light.profile}
+    EOF
+
+    # Fix permissions
+    ${pkgs.coreutils}/bin/chown -R zp1ke:users /home/zp1ke/.local/share/konsole
+  '';}

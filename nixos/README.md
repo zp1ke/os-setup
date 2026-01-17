@@ -7,13 +7,15 @@ A minimal yet powerful NixOS configuration featuring KDE Plasma 6, ZSH with mode
 - **Desktop Environment**: KDE Plasma 6 (via SDDM with Wayland).
 - **Shell**: ZSH enhanced with Oh-My-Zsh, autosuggestions, and syntax highlighting.
 - **Terminal Modernization**:
-  - `starship`: Customizable prompt.
+  - `starship`: Customizable prompt with **Tokyo Night** palette.
   - `eza`: Modern replacement for `ls` with icons.
   - `bat`: Modern replacement for `cat` with syntax highlighting.
   - `zoxide`: Smarter `cd`.
   - `ripgrep`, `fd`, `fzf` for fast searching.
+- **Automation**:
+  - **Dynamic Theme Switching**: Automatic Konsole profile switching (Light/Dark) based on screen brightness.
 - **Software**: Microsoft Edge, VS Code, Btop.
-- **Hardware Config**: Includes specific settings for UEFI boot and optional proprietary Nvidia drivers.
+- **Hardware Config**: Includes specific settings for UEFI boot, brightness control, and optional proprietary Nvidia drivers.
 
 ## Installation
 
@@ -71,6 +73,7 @@ Replace the default `configuration.nix` with the one provided in this directory.
 sudo nano /mnt/etc/nixos/configuration.nix
 # Paste the content of configuration.nix here
 ```
+*Note: You also need to create the scripts directory and file manually if using this method, which is tedious. Consider Option B.*
 
 #### Option B: Transfer via SSH (If Paste Fails)
 If VirtualBox/VMware clipboard sharing isn't working:
@@ -90,22 +93,27 @@ If VirtualBox/VMware clipboard sharing isn't working:
    > - **Guest Port**: `22` (Leave IPs blank)
 
 2. **On your Host Machine**:
-   Open a terminal in this project folder and run the command matching your network setup:
+   Open a terminal in this project folder and run the command matching your network setup. We need to copy both the config and the scripts folder.
 
    **If you used Port Forwarding (IP was 10.0.2.15):**
    ```powershell
-   scp -P 2222 nixos/configuration.nix nixos@localhost:~/
+   scp -P 2222 -r nixos/* nixos@localhost:~/
    ```
 
    **If using Bridged Adapter (IP is 192.168.x.x):**
    ```powershell
-   scp nixos/configuration.nix nixos@<VM_IP>:~/
+   scp -r nixos/* nixos@<VM_IP>:~/
    ```
 
 3. **In the VM**:
-   Move the file to the correct location:
+   Move the files to the correct location:
    ```bash
-   sudo mv ~/configuration.nix /mnt/etc/nixos/configuration.nix
+   # Copy configuration file
+   sudo cp ~/configuration.nix /mnt/etc/nixos/configuration.nix
+
+   # Copy scripts and config folders
+   sudo cp -r ~/scripts /mnt/etc/nixos/
+   sudo cp -r ~/config /mnt/etc/nixos/
    ```
 
 ### 5. Customization Required
