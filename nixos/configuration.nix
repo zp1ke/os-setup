@@ -73,7 +73,6 @@
     tree
 
     # Terminal "Cool Factor" Tools
-    starship         # High-performance customizable prompt
     eza              # Modern replacement for 'ls' (adds icons/colors)
     bat              # Modern replacement for 'cat' (adds syntax highlighting)
     zoxide           # Smarter 'cd' command
@@ -92,7 +91,15 @@
     nerd-fonts.jetbrains-mono
   ];
 
-  # --- 8. ZSH CONFIGURATION ---
+  # --- 8. STARSHIP CONFIGURATION (The Prompt) ---
+  programs.starship = {
+    enable = true;
+    # Custom settings
+    settings = {
+    };
+  };
+
+  # --- 9. ZSH CONFIGURATION ---
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -131,9 +138,8 @@
       update-system = "sudo nixos-rebuild switch"; # A shortcut for the rebuild command
     };
 
-    # Initialize Starship prompt (Overrides default ZSH look) & Zoxide
-    promptInit = ''
-      eval "$(${pkgs.starship}/bin/starship init zsh)"
+    # Initialize Zoxide
+    interactiveShellInit = ''
       eval "$(${pkgs.zoxide}/bin/zoxide init zsh)"
     '';
   };
@@ -141,6 +147,17 @@
   # Enable Docker daemon (for later use)
   virtualisation.docker.enable = true;
 
-  # --- 8. SYSTEM STATE ---
+  # --- 10. SYSTEM AUTOMATION ---
+  # NixOS configures Zsh system-wide (plugins, prompts, etc), so the user config can be empty.
+  # However, Zsh will prompt for a wizard if .zshrc is missing.
+  # This creates an empty .zshrc to suppress the wizard and load our NixOS config.
+  system.activationScripts.disableZshWizard = ''
+    if [ ! -f /home/zp1ke/.zshrc ]; then
+      ${pkgs.coreutils}/bin/touch /home/zp1ke/.zshrc
+      ${pkgs.coreutils}/bin/chown zp1ke:users /home/zp1ke/.zshrc
+    fi
+  '';
+
+  # --- 11. SYSTEM STATE ---
   system.stateVersion = "25.11";
 }
