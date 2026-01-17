@@ -87,7 +87,12 @@
     vscode           # Editor
   ];
 
-  # --- 7. ZSH CONFIGURATION ---
+  # --- 7. FONTS (Required for Icons) ---
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+  ];
+
+  # --- 8. ZSH CONFIGURATION ---
   programs.zsh = {
     enable = true;
     enableCompletion = true;
