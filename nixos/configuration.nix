@@ -85,7 +85,6 @@
     microsoft-edge   # Browser with Workspaces support
     bibata-cursors   # Modern cursor theme
     vscode           # Editor
-    brightnessctl    # For reading/setting screen brightness
 
     # KDE Tools (Required for theme scripts)
     kdePackages.qttools # For qdbus6
@@ -95,6 +94,8 @@
   # --- 7. FONTS (Required for Icons) ---
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
+    nerd-fonts.fira-code
+    nerd-fonts.caskaydia-cove
   ];
 
   # --- 8. STARSHIP CONFIGURATION (The Prompt) ---
@@ -158,7 +159,8 @@
 
       # Safety/Convenience
       ".." = "cd ..";
-      update-system = "sudo nixos-rebuild switch"; # A shortcut for the rebuild command
+      # Rebuild, keep current + 2 older generations, and free space
+      update-system = "sudo nixos-rebuild switch && sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3 && sudo nix-collect-garbage";
     };
 
     # Initialize Zoxide
@@ -186,12 +188,11 @@
 
   # --- 12. AUTOMATED TASK: AUTO KONSOLE THEME ---
   systemd.user.services.auto-konsole-theme = {
-    description = "Auto-switch Konsole theme based on brightness";
+    description = "Auto-switch Konsole theme based on system color scheme";
     serviceConfig.Type = "oneshot";
     # Ensure the script can find these commands
     path = with pkgs; [
       bash
-      brightnessctl
       gnugrep
       kdePackages.qttools # for qdbus6
       kdePackages.kconfig # for kwriteconfig6
@@ -203,7 +204,7 @@
     wantedBy = [ "timers.target" ];
     partOf = [ "auto-konsole-theme.service" ];
     timerConfig = {
-      OnCalendar = "*:0/30"; # Run every 30 minutes
+      OnCalendar = "*:0/15"; # Run every 15 minutes
       OnStartupSec = "1s";   # Run immediately after login
       Unit = "auto-konsole-theme.service";
     };

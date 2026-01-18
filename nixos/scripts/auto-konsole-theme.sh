@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 
-# Dependencies: brightnessctl, glue (qt tools)
+# Dependencies: kwriteconfig6, kreadconfig6, qdbus6 (or qdbus)
 
-# 1. Get Brightness Percentage
-CURRENT=$(brightnessctl get)
-MAX=$(brightnessctl max)
-PERCENT=$(( 100 * CURRENT / MAX ))
+# 1. Detect System Color Scheme
+# Reads the current color scheme from KDE globals (e.g., BreezeDark, BreezeLight)
+CURRENT_SCHEME=$(kreadconfig6 --file kdeglobals --group General --key ColorScheme)
 
-# 2. Define Thresholds & Profiles
+# 2. Define Profiles
 DARK_PROFILE="Dark.profile"
 LIGHT_PROFILE="Light.profile"
 
-if [ "$PERCENT" -lt 50 ]; then
+# Check if scheme name contains "Dark" (case insensitive)
+if [[ "${CURRENT_SCHEME,,}" == *"dark"* ]]; then
     TARGET_PROFILE="$DARK_PROFILE"
-    echo "Brightness ($PERCENT%) is low. Switching to Dark Profile."
+    echo "System scheme is $CURRENT_SCHEME. Switching to Dark Profile."
 else
     TARGET_PROFILE="$LIGHT_PROFILE"
-    echo "Brightness ($PERCENT%) is high. Switching to Light Profile."
+    echo "System scheme is $CURRENT_SCHEME. Switching to Light Profile."
 fi
 
 # 3. Apply to Default Config (For new Konsole windows)
