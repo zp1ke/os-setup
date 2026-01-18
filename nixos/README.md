@@ -122,6 +122,12 @@ Before applying, open the config and change the following:
 sudo nano /mnt/etc/nixos/configuration.nix
 ```
 
+- **Username**:
+  - The default configuration uses the username `zp1ke`.
+  - Press `Ctrl + \` (Replace) in nano.
+  - Search for `zp1ke` and replace it with your desired username (e.g., `john`).
+  - This updates the user definition and all home directory paths.
+
 - **Nvidia Drivers**:
   - **VM**: Keep Section 4 commented out.
   - **Real Hardware**: Uncomment Section 4 if you have an Nvidia GPU.
@@ -147,6 +153,24 @@ sudo nixos-rebuild switch
 ```bash
 reboot
 ```
+
+### 8. Post-Install Setup
+After rebooting, you might not be able to log in to the graphical session immediately if you haven't set a user password.
+
+1. **Login as Root**:
+   - If SDDM (the login screen) doesn't let you login, press `Ctrl + Alt + F2` to switch to a TTY.
+   - Login with `root` and the password you set during installation.
+   - If you didn't set a root password, generic text-mode installers sometimes leave it blank or `nixos`.
+
+2. **Set User Password**:
+   ```bash
+   passwd your_username
+   ```
+   Replace `your_username` with the username you configured in `configuration.nix`.
+
+3. **Return to GUI**:
+   - Press `Ctrl + Alt + F1` (or `F7`).
+   - Login with your user.
 
 ## Included Aliases
 
