@@ -13,9 +13,11 @@ LIGHT_PROFILE="Light.profile"
 # Check if scheme name contains "Dark" (case insensitive)
 if [[ "${CURRENT_SCHEME,,}" == *"dark"* ]]; then
     TARGET_PROFILE="$DARK_PROFILE"
+    sed -i 's/palette = ".*"/palette = "tokyo_night"/' /home/zp1ke/.config/starship.toml
     echo "System scheme is $CURRENT_SCHEME. Switching to Dark Profile."
 else
     TARGET_PROFILE="$LIGHT_PROFILE"
+    sed -i 's/palette = ".*"/palette = "tokyo_day"/' /home/zp1ke/.config/starship.toml
     echo "System scheme is $CURRENT_SCHEME. Switching to Light Profile."
 fi
 

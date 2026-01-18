@@ -3,5 +3,5 @@ Name=Dark
 Parent=FALLBACK/
 
 [Appearance]
-ColorScheme=Breeze
+ColorScheme=TokyoNight
 Font=JetBrainsMono Nerd Font,12,-1,5,50,0,0,0,0,0

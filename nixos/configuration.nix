@@ -101,27 +101,46 @@
   # --- 8. STARSHIP CONFIGURATION (The Prompt) ---
   programs.starship = {
     enable = true;
-    settings = {
-      # Tokyo Night inspired palette
-      palette = "tokyo_night";
-      palettes.tokyo_night = {
-        red = "#f7768e";
-        orange = "#ff9e64";
-        yellow = "#e0af68";
-        green = "#9ece6a";
-        blue = "#7aa2f7";
-        purple = "#bb9af7";
-        cyan = "#7dcfff";
-        white = "#a9b1d6";
-        bg = "#1a1b26";
-      };
-
-      character = {
-        success_symbol = "[➜](bold green)";
-        error_symbol = "[➜](bold red)";
-      };
-    };
+    # We will generate the config manually in activationScripts to allow dynamic switching
+    # commands to point to mutable config
   };
+
+  # Activation script to generate mutable starship config
+  system.activationScripts.setupStarship = ''
+    mkdir -p /home/zp1ke/.config
+    cat > /home/zp1ke/.config/starship.toml <<EOF
+    # Tokyo Night inspired palette (Dynamic)
+    palette = "tokyo_night"
+
+    [palettes.tokyo_night]
+    red = "#f7768e"
+    orange = "#ff9e64"
+    yellow = "#e0af68"
+    green = "#9ece6a"
+    blue = "#7aa2f7"
+    purple = "#bb9af7"
+    cyan = "#7dcfff"
+    white = "#a9b1d6"
+    bg = "#1a1b26"
+
+    [palettes.tokyo_day]
+    red = "#f52a65"
+    orange = "#b15c00"
+    yellow = "#8c6c3c"
+    green = "#587539"
+    blue = "#385fbf"
+    purple = "#7847bd"
+    cyan = "#007197"
+    white = "#3760bf"
+    bg = "#e1e2e7"
+
+    [character]
+    success_symbol = "[➜](bold green)"
+    error_symbol = "[➜](bold red)"
+    EOF
+
+    chown zp1ke:users /home/zp1ke/.config/starship.toml
+  '';
 
   # --- 9. ZSH CONFIGURATION ---
   programs.zsh = {
@@ -166,6 +185,7 @@
     # Initialize Zoxide
     interactiveShellInit = ''
       eval "$(${pkgs.zoxide}/bin/zoxide init zsh)"
+      export STARSHIP_CONFIG=/home/zp1ke/.config/starship.toml
     '';
   };
 
@@ -222,6 +242,15 @@
     # Write Light Profile
     cat > /home/zp1ke/.local/share/konsole/Light.profile <<EOF
     ${builtins.readFile ./config/konsole/Light.profile}
+    EOF
+
+    # Write Color Schemes
+    cat > /home/zp1ke/.local/share/konsole/TokyoNight.colorscheme <<EOF
+    ${builtins.readFile ./config/konsole/TokyoNight.colorscheme}
+    EOF
+
+    cat > /home/zp1ke/.local/share/konsole/TokyoDay.colorscheme <<EOF
+    ${builtins.readFile ./config/konsole/TokyoDay.colorscheme}
     EOF
 
     # Fix permissions
