@@ -1,0 +1,18 @@
+{
+  "java.jdt.ls.java.home": "${env:JAVA_HOME}",
+  "java.configuration.runtimes": [
+    {
+      "name": "Nix-Java",
+      "path": "${env:JAVA_HOME}",
+      "default": true
+    }
+  ],
+  "maven.terminal.useJavaHome": true,
+  "gradle.java.home": "${env:JAVA_HOME}",
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  }
+}

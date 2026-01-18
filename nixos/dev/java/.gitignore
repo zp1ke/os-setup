@@ -1,0 +1,18 @@
+# Nix
+.direnv/
+result
+
+# Java
+target/
+build/
+.gradle/
+.class
+*.jar
+*.war
+
+# IDEs
+.idea/
+*.iml
+.classpath
+.project
+.settings/

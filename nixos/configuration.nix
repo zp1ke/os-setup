@@ -206,6 +206,14 @@
   # --- 11. SYSTEM STATE ---
   system.stateVersion = "25.11";
 
+  # --- 11.5 NIX SETTINGS (Flakes & Direnv) ---
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true; # Better caching for nix flakes
+  };
+
   # --- 12. AUTOMATED TASK: AUTO KONSOLE THEME ---
   systemd.user.services.auto-konsole-theme = {
     description = "Auto-switch Konsole theme based on system color scheme";
