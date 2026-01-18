@@ -9,6 +9,7 @@
   # --- 1. BOOTLOADER ---
   # For modern UEFI Systems (Standard for most VMs now)
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 3; # Limit boot entries to the last 3
   boot.loader.efi.canTouchEfiVariables = true;
 
   # --- 2. NETWORKING & LOCALE ---
@@ -212,6 +213,14 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true; # Better caching for nix flakes
+  };
+
+  # --- 11.6 GARBAGE COLLECTION ---
+  # Automatically free up space by deleting old generations
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
   };
 
   # --- 12. AUTOMATED TASK: AUTO KONSOLE THEME ---
