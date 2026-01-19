@@ -78,6 +78,7 @@
     eza              # Modern replacement for 'ls' (adds icons/colors)
     bat              # Modern replacement for 'cat' (adds syntax highlighting)
     zoxide           # Smarter 'cd' command
+    direnv           # Per-directory environment variables
     fzf              # Command-line fuzzy finder
     ripgrep          # The 'grep' replacement (ultra fast)
     fd               # The 'find' replacement (user friendly)
