@@ -32,7 +32,7 @@
           ];
 
           shellHook = ''
-            echo "🌱 Node.js Development Environment Loaded"
+            echo "🌱 Node.js Development Environment Loaded!"
             echo "Node Version: $(node --version)"
             echo "Npm Version: $(npm --version)"
           '';

@@ -34,7 +34,7 @@
           JAVA_HOME = "${jdk}";
 
           shellHook = ''
-            echo "☕ Java Development Environment Loaded"
+            echo "☕ Java Development Environment Loaded!"
             echo "Java Version: $(java -version 2>&1 | head -n 1)"
             echo "Maven Version: $(mvn -version | head -n 1)"
             echo "Gradle Version: $(gradle -version | head -n 1)"

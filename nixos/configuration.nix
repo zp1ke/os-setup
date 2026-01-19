@@ -72,6 +72,7 @@
     curl
     btop             # Modern task manager
     tree
+    jq               # Command-line JSON processor
 
     # Terminal "Cool Factor" Tools
     starship         # The Prompt
@@ -197,10 +198,10 @@
   # --- 10. SYSTEM AUTOMATION ---
   # NixOS configures Zsh system-wide (plugins, prompts, etc), so the user config can be empty.
   # However, Zsh will prompt for a wizard if .zshrc is missing.
-  # This creates an empty .zshrc to suppress the wizard and load our NixOS config.
+  # This creates a .zshrc with direnv hook to suppress the wizard and load our NixOS config.
   system.activationScripts.disableZshWizard = ''
     if [ ! -f /home/zp1ke/.zshrc ]; then
-      ${pkgs.coreutils}/bin/touch /home/zp1ke/.zshrc
+      echo 'eval "$(direnv hook zsh)"' > /home/zp1ke/.zshrc
       ${pkgs.coreutils}/bin/chown zp1ke:users /home/zp1ke/.zshrc
     fi
   '';
