@@ -59,7 +59,7 @@
     isNormalUser = true;
     description = "Zp1k_e";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
-    shell = pkgs.zsh; # Set ZSH as default shell
+    shell = pkgs.fish; # Set Fish as default shell
   };
 
   # --- 6. PACKAGES & SOFTWARE ---
@@ -104,8 +104,8 @@
   # --- 8. STARSHIP CONFIGURATION (The Prompt) ---
   programs.starship = {
     enable = true;
-    # We will generate the config manually in activationScripts to allow dynamic switching
-    # commands to point to mutable config
+    # We generate the config manually in activationScripts to allow dynamic theme switching
+    # Fish will load this config via STARSHIP_CONFIG environment variable
   };
 
   # Activation script to generate mutable starship config
@@ -145,18 +145,28 @@
     chown zp1ke:users /home/zp1ke/.config/starship.toml
   '';
 
-  # --- 9. ZSH CONFIGURATION ---
-  programs.zsh = {
+  # --- 9. FISH CONFIGURATION ---
+  programs.fish = {
     enable = true;
-    enableCompletion = true;
-    autosuggestions.enable = true;     # Grey text suggestions as you type
-    syntaxHighlighting.enable = true;  # Colors commands green/red
 
-    # Oh-My-Zsh plugins for functionality
-    ohMyZsh = {
-      enable = true;
-      plugins = [ "git" "docker" "history-substring-search" ];
-    };
+    # Fish plugins for enhanced experience
+    plugins = [
+      # Fish plugin manager - provides useful utilities
+      {
+        name = "bass";
+        src = pkgs.fishPlugins.bass.src;
+      }
+      # Colored man pages
+      {
+        name = "colored-man-pages";
+        src = pkgs.fishPlugins.colored-man-pages.src;
+      }
+      # Better git integration
+      {
+        name = "git";
+        src = pkgs.fishPlugins.git.src;
+      }
+    ];
 
     # The Aliases: Map old commands to new cool tools
     shellAliases = {
@@ -185,10 +195,19 @@
       update-system = "sudo nixos-rebuild switch && sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3 && sudo nix-collect-garbage";
     };
 
-    # Initialize Zoxide
+    # Initialize integrations
     interactiveShellInit = ''
-      eval "$(${pkgs.zoxide}/bin/zoxide init zsh)"
-      export STARSHIP_CONFIG=/home/zp1ke/.config/starship.toml
+      # Zoxide integration
+      ${pkgs.zoxide}/bin/zoxide init fish | source
+
+      # Starship prompt
+      set -x STARSHIP_CONFIG /home/zp1ke/.config/starship.toml
+
+      # Disable greeting message
+      set fish_greeting
+
+      # Enable vi key bindings (optional - comment out if you prefer default emacs mode)
+      # fish_vi_key_bindings
     '';
   };
 
@@ -196,13 +215,12 @@
   virtualisation.docker.enable = true;
 
   # --- 10. SYSTEM AUTOMATION ---
-  # NixOS configures Zsh system-wide (plugins, prompts, etc), so the user config can be empty.
-  # However, Zsh will prompt for a wizard if .zshrc is missing.
-  # This creates a .zshrc with direnv hook to suppress the wizard and load our NixOS config.
-  system.activationScripts.disableZshWizard = ''
-    if [ ! -f /home/zp1ke/.zshrc ]; then
-      echo 'eval "$(direnv hook zsh)"' > /home/zp1ke/.zshrc
-      ${pkgs.coreutils}/bin/chown zp1ke:users /home/zp1ke/.zshrc
+  # Create Fish config file with direnv hook
+  system.activationScripts.setupFishConfig = ''
+    ${pkgs.coreutils}/bin/mkdir -p /home/zp1ke/.config/fish
+    if [ ! -f /home/zp1ke/.config/fish/config.fish ]; then
+      echo 'direnv hook fish | source' > /home/zp1ke/.config/fish/config.fish
+      ${pkgs.coreutils}/bin/chown -R zp1ke:users /home/zp1ke/.config/fish
     fi
   '';
 
