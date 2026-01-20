@@ -87,10 +87,32 @@ If VirtualBox/VMware clipboard sharing isn't working:
 
    > **Troubleshooting: IP is 10.0.2.15?**
    > This is the default NAT IP and is not reachable from your host.
-   > **Fix:** In the VirtualBox window menu, go to **Devices > Network > Network Settings > Advanced > Port Forwarding**. Add a new rule:
+   >
+   > **Fix for VirtualBox:**
+   > In the VirtualBox window menu, go to **Devices > Network > Network Settings > Advanced > Port Forwarding**. Add a new rule:
    > - **Protocol**: TCP
    > - **Host Port**: `2222`
    > - **Guest Port**: `22` (Leave IPs blank)
+   >
+   > **Fix for QEMU/KVM (virt-manager):**
+   > 1. Shutdown the VM.
+   > 2. In virt-manager, select your VM and click **Open** (or double-click).
+   > 3. Click the **Show virtual hardware details** icon (ℹ️ or "i" button).
+   > 4. Select **NIC** in the left panel.
+   > 5. Change **Network source** from `NAT` to `Bridge device...` or use port forwarding:
+   >    - For port forwarding with NAT: Edit the VM's XML directly or use `virsh`:
+   >      ```bash
+   >      virsh edit <vm-name>
+   >      ```
+   >      Add under `<devices>`:
+   >      ```xml
+   >      <qemu:commandline>
+   >        <qemu:arg value='-netdev'/>
+   >        <qemu:arg value='user,id=net0,hostfwd=tcp::2222-:22'/>
+   >      </qemu:commandline>
+   >      ```
+   >    - Or simply switch to **Bridge** mode for direct network access.
+   > 6. Start the VM and check the new IP with `ip addr`.
 
 2. **On your Host Machine**:
    Open a terminal in this project folder and run the command matching your network setup. We need to copy both the config and the scripts folder.
