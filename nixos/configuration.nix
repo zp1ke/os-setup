@@ -84,6 +84,10 @@
     ripgrep          # The 'grep' replacement (ultra fast)
     fd               # The 'find' replacement (user friendly)
 
+    # Fish Plugins
+    fishPlugins.bass
+    fishPlugins.colored-man-pages
+
     # Desktop Apps
     microsoft-edge   # Browser with Workspaces support
     bibata-cursors   # Modern cursor theme
@@ -148,25 +152,6 @@
   # --- 9. FISH CONFIGURATION ---
   programs.fish = {
     enable = true;
-
-    # Fish plugins for enhanced experience
-    plugins = [
-      # Fish plugin manager - provides useful utilities
-      {
-        name = "bass";
-        src = pkgs.fishPlugins.bass.src;
-      }
-      # Colored man pages
-      {
-        name = "colored-man-pages";
-        src = pkgs.fishPlugins.colored-man-pages.src;
-      }
-      # Better git integration
-      {
-        name = "git";
-        src = pkgs.fishPlugins.git.src;
-      }
-    ];
 
     # The Aliases: Map old commands to new cool tools
     shellAliases = {
