@@ -105,6 +105,14 @@
     nerd-fonts.caskaydia-cove
   ];
 
+  # Set default system fonts
+  fonts.fontconfig = {
+    defaultFonts = {
+      monospace = [ "CaskaydiaCove Nerd Font Mono" ];
+      sansSerif = [ "CaskaydiaCove Nerd Font" ]; # Optional: if you want it everywhere
+    };
+  };
+
   # --- 8. STARSHIP CONFIGURATION (The Prompt) ---
   programs.starship = {
     enable = true;
