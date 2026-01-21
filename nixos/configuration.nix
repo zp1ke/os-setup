@@ -115,6 +115,7 @@
   # Activation script to generate mutable starship config
   system.activationScripts.setupStarship = ''
     mkdir -p /home/zp1ke/.config
+    chown zp1ke:users /home/zp1ke/.config
     cat > /home/zp1ke/.config/starship.toml <<EOF
     # Tokyo Night inspired palette (Dynamic)
     palette = "tokyo_night"
@@ -203,10 +204,14 @@
   # Create Fish config file with direnv hook
   system.activationScripts.setupFishConfig = ''
     ${pkgs.coreutils}/bin/mkdir -p /home/zp1ke/.config/fish
+    ${pkgs.coreutils}/bin/chown zp1ke:users /home/zp1ke/.config
+
     if [ ! -f /home/zp1ke/.config/fish/config.fish ]; then
       echo 'direnv hook fish | source' > /home/zp1ke/.config/fish/config.fish
-      ${pkgs.coreutils}/bin/chown -R zp1ke:users /home/zp1ke/.config/fish
     fi
+
+    # Always ensure ownership is correct
+    ${pkgs.coreutils}/bin/chown -R zp1ke:users /home/zp1ke/.config/fish
   '';
 
   # --- 11. SYSTEM STATE ---
@@ -255,6 +260,8 @@
   # --- 13. GENERATE KONSOLE PROFILES ---
   system.activationScripts.setupKonsoleProfiles = ''
     mkdir -p /home/zp1ke/.local/share/konsole
+    ${pkgs.coreutils}/bin/chown zp1ke:users /home/zp1ke/.local
+    ${pkgs.coreutils}/bin/chown zp1ke:users /home/zp1ke/.local/share
 
     # Write Dark Profile
     cat > /home/zp1ke/.local/share/konsole/Dark.profile <<EOF
