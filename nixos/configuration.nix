@@ -98,6 +98,13 @@
     kdePackages.kconfig # For kwriteconfig6
   ];
 
+  # --- 6.1 ENVIRONMENT VARIABLES ---
+  environment.variables = {
+    # Cursor Theme (Fixes reset on reboot)
+    XCURSOR_THEME = "Bibata-Modern-Amber";
+    XCURSOR_SIZE = "24";
+  };
+
   # --- 7. FONTS (Required for Icons) ---
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
@@ -259,7 +266,7 @@
     wantedBy = [ "timers.target" ];
     partOf = [ "auto-konsole-theme.service" ];
     timerConfig = {
-      OnCalendar = "*:0/15"; # Run every 15 minutes
+      OnCalendar = "*:0/5"; # Run every 5 minutes
       OnStartupSec = "1s";   # Run immediately after login
       Unit = "auto-konsole-theme.service";
     };
