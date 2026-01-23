@@ -48,6 +48,25 @@ systemctl --user enable theme-setup.service
 systemctl --user list-timers
 ```
 
+Disable and stop:
+```shell
+# Disable the timer first (otherwise systemd may warn that the service's triggering unit is still active)
+systemctl --user disable --now theme-setup.timer
+systemctl --user disable theme-setup.service
+
+# Optional: if it ran recently, stop any in-flight run
+systemctl --user stop theme-setup.service
+
+systemctl --user daemon-reload
+systemctl --user list-timers | grep theme-setup || true
+```
+
+Optional cleanup (remove unit files):
+```shell
+rm -f ~/.config/systemd/user/theme-setup.timer ~/.config/systemd/user/theme-setup.service
+systemctl --user daemon-reload
+```
+
 Check logs:
 ```shell
 journalctl --user -u theme-setup.service
@@ -85,6 +104,25 @@ systemctl --user daemon-reload
 systemctl --user enable --now wallpaper-setup.timer
 systemctl --user enable wallpaper-setup.service
 systemctl --user list-timers
+```
+
+Disable and stop:
+```shell
+# Disable the timer first (otherwise systemd may warn that the service's triggering unit is still active)
+systemctl --user disable --now wallpaper-setup.timer
+systemctl --user disable wallpaper-setup.service
+
+# Optional: if it ran recently, stop any in-flight run
+systemctl --user stop wallpaper-setup.service
+
+systemctl --user daemon-reload
+systemctl --user list-timers | grep wallpaper-setup || true
+```
+
+Optional cleanup (remove unit files):
+```shell
+rm -f ~/.config/systemd/user/wallpaper-setup.timer ~/.config/systemd/user/wallpaper-setup.service
+systemctl --user daemon-reload
 ```
 
 Check logs:
