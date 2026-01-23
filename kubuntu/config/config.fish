@@ -1,24 +1,33 @@
-# Fish Shell Configuration for Kubuntu
-# Matches NixOS/macOS structure
+# Fish Shell Configuration
+# Shared template across Kubuntu/macOS/NixOS
 
 # ===================================
 # 1. INIT
 # ===================================
-# Disable greeting
 set fish_greeting
 
-# Initialize Starship
+# ===================================
+# 2. ENVIRONMENT
+# ===================================
+set -gx STARSHIP_CONFIG "$HOME/.config/starship.toml"
+
+if type -q direnv
+    direnv hook fish | source
+end
+
+# ===================================
+# 3. INTEGRATIONS
+# ===================================
 if type -q starship
     starship init fish | source
 end
 
-# Initialize Zoxide
 if type -q zoxide
     zoxide init fish | source
 end
 
 # ===================================
-# 2. ALIASES
+# 4. ALIASES
 # ===================================
 
 # Eza (better ls)
@@ -54,9 +63,5 @@ end
 # Navigation
 alias ..="cd .."
 
-# System Update
+# System update
 alias update-system="sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y"
-
-# ===================================
-# 3. ENVIRONMENT
-# ===================================
