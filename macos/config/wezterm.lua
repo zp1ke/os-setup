@@ -18,8 +18,17 @@ config.font_size = 14.0
 -- ===================================
 -- APPEARANCE
 -- ===================================
--- Use Tokyo Night theme to match NixOS Konsole setup
-config.color_scheme = 'Tokyo Night'
+-- Automatic theme switching based on macOS system appearance
+-- Set initial theme (will be overridden by appearance detection)
+function scheme_for_appearance(appearance)
+  if appearance:find('Dark') then
+    return 'Tokyo Night'
+  else
+    return 'Catppuccin Latte'
+  end
+end
+
+config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
 
 -- Window appearance
 config.window_decorations = "RESIZE"
@@ -77,10 +86,9 @@ config.send_composed_key_when_left_alt_is_pressed = false
 config.send_composed_key_when_right_alt_is_pressed = false
 
 -- ===================================
--- AUTOMATIC THEME SWITCHING (Optional)
+-- AUTOMATIC THEME SWITCHING
 -- ===================================
--- Uncomment to enable automatic dark/light mode switching based on macOS system appearance
---[[
+-- Enable automatic dark/light mode switching based on macOS system appearance
 wezterm.on('window-config-reloaded', function(window, pane)
   local appearance = window:get_appearance()
   local overrides = window:get_config_overrides() or {}
@@ -88,11 +96,10 @@ wezterm.on('window-config-reloaded', function(window, pane)
   if appearance:find("Dark") then
     overrides.color_scheme = 'Tokyo Night'
   else
-    overrides.color_scheme = 'Tokyo Day'
+    overrides.color_scheme = 'Catppuccin Latte'
   end
 
   window:set_config_overrides(overrides)
 end)
-]]--
 
 return config

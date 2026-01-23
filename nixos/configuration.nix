@@ -257,6 +257,20 @@
 
     config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
 
+    -- Automatic theme switching based on system appearance
+    wezterm.on('window-config-reloaded', function(window, pane)
+      local appearance = window:get_appearance()
+      local overrides = window:get_config_overrides() or {}
+
+      if appearance:find("Dark") then
+        overrides.color_scheme = 'Catppuccin Mocha'
+      else
+        overrides.color_scheme = 'Catppuccin Latte'
+      end
+
+      window:set_config_overrides(overrides)
+    end)
+
     -- 2. Font Configuration
     config.font = wezterm.font 'CaskaydiaCove Nerd Font Mono'
     config.font_size = 12.0
