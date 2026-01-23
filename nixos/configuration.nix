@@ -129,8 +129,8 @@
     mkdir -p /home/zp1ke/.config
     chown zp1ke:users /home/zp1ke/.config
     cat > /home/zp1ke/.config/starship.toml <<EOF
+    # Starship Prompt Configuration
     # Standard ANSI Color Config
-
     # We delegate color choices to the terminal emulator
 
     [directory]
@@ -148,6 +148,35 @@
     [character]
     success_symbol = "[➜](bold green)"
     error_symbol = "[➜](bold red)"
+
+    # Optional: Show command duration for long-running commands
+    [cmd_duration]
+    min_time = 500
+    format = "took [\$duration](bold yellow)"
+
+    # Optional: Show battery status on laptops
+    [battery]
+    full_symbol = "🔋"
+    charging_symbol = "⚡"
+    discharging_symbol = "💀"
+
+    [[battery.display]]
+    threshold = 30
+    style = "bold red"
+
+    # Optional: Show time
+    [time]
+    disabled = true
+    format = '🕙[\[ \$time \]](\$style) '
+    time_format = "%T"
+
+    # Optional: Show username@hostname
+    [username]
+    style_user = "bold dimmed blue"
+    show_always = false
+
+    [hostname]
+    ssh_only = true
     EOF
 
     chown zp1ke:users /home/zp1ke/.config/starship.toml

@@ -1,6 +1,4 @@
 # Starship Prompt Configuration
-# Based on NixOS configuration
-
 # Standard ANSI Color Config
 # We delegate color choices to the terminal emulator
 
