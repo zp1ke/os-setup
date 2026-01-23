@@ -12,7 +12,7 @@ end
 -- ===================================
 -- FONT CONFIGURATION
 -- ===================================
-config.font = wezterm.font('CaskaydiaCove Nerd Font Mono')
+config.font = wezterm.font('FiraCode Nerd Font')
 config.font_size = 14.0
 
 -- ===================================
@@ -30,20 +30,38 @@ end
 
 config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
 
--- Window appearance
+-- ===================================
+-- WINDOW CONFIGURATION
+-- ===================================
+-- Window decorations
 config.window_decorations = "RESIZE"
+config.window_background_opacity = 0.9
+
+-- Initial Size
+config.initial_cols = 120
+config.initial_rows = 30
+
+-- Padding
 config.window_padding = {
-  left = 8,
-  right = 8,
-  top = 8,
-  bottom = 8,
+  left = 10,
+  right = 10,
+  top = 10,
+  bottom = 10,
 }
 
--- Tab bar
+-- ===================================
+-- TAB BAR
+-- ===================================
 config.enable_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = false
 config.use_fancy_tab_bar = true
 config.tab_bar_at_bottom = false
+
+-- ===================================
+-- SCROLLBACK
+-- ===================================
+config.scrollback_lines = 3500
+config.enable_scroll_bar = true
 
 -- ===================================
 -- SHELL CONFIGURATION
@@ -52,30 +70,21 @@ config.tab_bar_at_bottom = false
 -- No need to hardcode the path here as it varies by Mac architecture
 
 -- ===================================
--- SCROLLBACK
+-- SYSTEM SPECIFIC (macOS)
 -- ===================================
-config.scrollback_lines = 10000
 
--- ===================================
 -- PERFORMANCE
--- ===================================
 config.max_fps = 120
 config.animation_fps = 60
 
--- ===================================
 -- CURSOR
--- ===================================
 config.default_cursor_style = 'BlinkingBlock'
 config.cursor_blink_rate = 800
 
--- ===================================
 -- BELL
--- ===================================
 config.audible_bell = "Disabled"
 
--- ===================================
 -- KEY BINDINGS
--- ===================================
 config.keys = {
   -- Make Option key work as Alt (for better terminal compatibility)
   -- This is important for some CLI tools
@@ -85,9 +94,7 @@ config.keys = {
 config.send_composed_key_when_left_alt_is_pressed = false
 config.send_composed_key_when_right_alt_is_pressed = false
 
--- ===================================
--- AUTOMATIC THEME SWITCHING
--- ===================================
+-- AUTOMATIC THEME SWITCHING EVENT
 -- Enable automatic dark/light mode switching based on macOS system appearance
 wezterm.on('window-config-reloaded', function(window, pane)
   local appearance = window:get_appearance()

@@ -242,14 +242,30 @@
     chown zp1ke:users /home/zp1ke/.config/wezterm
 
     cat > /home/zp1ke/.config/wezterm/wezterm.lua <<EOF
-    local wezterm = require 'wezterm'
-    local config = wezterm.config_builder()
+    -- WezTerm Configuration for NixOS
+    -- Reconciled with Kubuntu config
 
-    -- 1. Appearance / Theme Logic
-    -- This function polls the system theme automatically
+    local wezterm = require 'wezterm'
+    local config = {}
+
+    -- Use config builder if available
+    if wezterm.config_builder then
+      config = wezterm.config_builder()
+    end
+
+    -- ===================================
+    -- FONT CONFIGURATION
+    -- ===================================
+    config.font = wezterm.font('FiraCode Nerd Font')
+    config.font_size = 14.0
+
+    -- ===================================
+    -- APPEARANCE
+    -- ===================================
+    -- Automatic theme switching based on system appearance.
     function scheme_for_appearance(appearance)
-      if appearance:find 'Dark' then
-        return 'Catppuccin Mocha'
+      if appearance:find('Dark') then
+        return 'Tokyo Night'
       else
         return 'Catppuccin Latte'
       end
@@ -257,40 +273,44 @@
 
     config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
 
-    -- Automatic theme switching based on system appearance
-    wezterm.on('window-config-reloaded', function(window, pane)
-      local appearance = window:get_appearance()
-      local overrides = window:get_config_overrides() or {}
+    -- ===================================
+    -- WINDOW CONFIGURATION
+    -- ===================================
+    -- Window decorations
+    config.window_decorations = "RESIZE"
+    config.window_background_opacity = 0.9
 
-      if appearance:find("Dark") then
-        overrides.color_scheme = 'Catppuccin Mocha'
-      else
-        overrides.color_scheme = 'Catppuccin Latte'
-      end
-
-      window:set_config_overrides(overrides)
-    end)
-
-    -- 2. Font Configuration
-    config.font = wezterm.font 'CaskaydiaCove Nerd Font Mono'
-    config.font_size = 12.0
-
-    -- 3. UI Cleanup (Minimalist look)
-    config.window_decorations = "RESIZE" -- Hides title bar but allows resizing
-    config.window_background_opacity = 0.95
-    config.hide_tab_bar_if_only_one_tab = true
-
-    -- 4. Initial Size
+    -- Initial Size
     config.initial_cols = 120
     config.initial_rows = 30
 
-    -- 5. Padding
+    -- Padding
     config.window_padding = {
       left = 10,
       right = 10,
       top = 10,
       bottom = 10,
     }
+
+    -- ===================================
+    -- TAB BAR
+    -- ===================================
+    config.enable_tab_bar = true
+    config.hide_tab_bar_if_only_one_tab = false
+    config.use_fancy_tab_bar = true
+    config.tab_bar_at_bottom = false
+
+    -- ===================================
+    -- SCROLLBACK
+    -- ===================================
+    config.scrollback_lines = 3500
+    config.enable_scroll_bar = true
+
+    -- ===================================
+    -- SHELL CONFIGURATION
+    -- ===================================
+    -- Set fish as default if not set by system
+    -- config.default_prog = { '/run/current-system/sw/bin/fish', '-l' }
 
     return config
     EOF

@@ -14,7 +14,7 @@ end
 -- ===================================
 -- Using FiraCode as installed by the guide
 config.font = wezterm.font('FiraCode Nerd Font')
-config.font_size = 12.0
+config.font_size = 14.0
 
 -- ===================================
 -- APPEARANCE
@@ -32,19 +32,28 @@ end
 
 config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
 
--- Window appearance
-config.scrollback_lines = 3500
+-- ===================================
+-- WINDOW CONFIGURATION
+-- ===================================
+-- Window decorations
+config.window_decorations = "RESIZE" -- Hides title bar but allows resizing
+config.window_background_opacity = 0.9
 
--- Remove title bar on Linux if desired, or keep generic
-config.window_decorations = "RESIZE"
+-- Initial Size
+config.initial_cols = 120
+config.initial_rows = 30
+
+-- Padding
 config.window_padding = {
-  left = 8,
-  right = 8,
-  top = 8,
-  bottom = 8,
+  left = 10,
+  right = 10,
+  top = 10,
+  bottom = 10,
 }
 
--- Tab bar
+-- ===================================
+-- TAB BAR
+-- ===================================
 config.enable_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = false
 config.use_fancy_tab_bar = true
@@ -53,8 +62,8 @@ config.tab_bar_at_bottom = false
 -- ===================================
 -- SCROLLBACK
 -- ===================================
--- Increase scrollback buffer size (default is 3500)
-config.scrollback_lines = 10000
+-- Increase scrollback buffer size
+config.scrollback_lines = 3500
 -- Enable scroll bar for visual feedback
 config.enable_scroll_bar = true
 
