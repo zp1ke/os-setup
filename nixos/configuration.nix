@@ -128,56 +128,7 @@
   system.activationScripts.setupStarship = ''
     mkdir -p /home/zp1ke/.config
     chown zp1ke:users /home/zp1ke/.config
-    cat > /home/zp1ke/.config/starship.toml <<EOF
-    # Starship Prompt Configuration
-    # Standard ANSI Color Config
-    # We delegate color choices to the terminal emulator
-
-    [directory]
-    style = "bold blue"
-
-    [git_branch]
-    style = "bold purple"
-
-    [git_status]
-    style = "bold red"
-
-    [package]
-    style = "bold yellow"
-
-    [character]
-    success_symbol = "[➜](bold green)"
-    error_symbol = "[➜](bold red)"
-
-    # Optional: Show command duration for long-running commands
-    [cmd_duration]
-    min_time = 500
-    format = "took [\$duration](bold yellow)"
-
-    # Optional: Show battery status on laptops
-    [battery]
-    full_symbol = "🔋"
-    charging_symbol = "⚡"
-    discharging_symbol = "💀"
-
-    [[battery.display]]
-    threshold = 30
-    style = "bold red"
-
-    # Optional: Show time
-    [time]
-    disabled = true
-    format = '🕙[\[ \$time \]](\$style) '
-    time_format = "%T"
-
-    # Optional: Show username@hostname
-    [username]
-    style_user = "bold dimmed blue"
-    show_always = false
-
-    [hostname]
-    ssh_only = true
-    EOF
+    ${pkgs.coreutils}/bin/install -m 0644 ${./config/starship.toml} /home/zp1ke/.config/starship.toml
 
     chown zp1ke:users /home/zp1ke/.config/starship.toml
   '';
@@ -185,48 +136,6 @@
   # --- 9. FISH CONFIGURATION ---
   programs.fish = {
     enable = true;
-
-    # The Aliases: Map old commands to new cool tools
-    shellAliases = {
-      # Eza (better ls)
-      ls  = "eza --icons";                                     # Just 'ls' now shows icons
-      ll  = "eza -l --icons --git --group-directories-first";  # detailed list
-      la  = "eza -la --icons --git --group-directories-first"; # all files
-
-      # Bat (better cat)
-      # --style=plain is good for 'cat' so you don't get grid lines when copying text
-      cat = "bat --style=plain";
-
-      # Zoxide (better cd)
-      # Note: zoxide initializes 'z', but we can alias 'cd' to it for muscle memory
-      cd = "z";
-
-      # Ripgrep (better grep)
-      grep = "rg";
-
-      # Fd (better find)
-      find = "fd";
-
-      # Safety/Convenience
-      ".." = "cd ..";
-      # Rebuild, keep current + 2 older generations, and free space
-      update-system = "sudo nixos-rebuild switch && sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3 && sudo nix-collect-garbage";
-    };
-
-    # Initialize integrations
-    interactiveShellInit = ''
-      # Zoxide integration
-      ${pkgs.zoxide}/bin/zoxide init fish | source
-
-      # Starship prompt
-      set -x STARSHIP_CONFIG /home/zp1ke/.config/starship.toml
-
-      # Disable greeting message
-      set fish_greeting
-
-      # Enable vi key bindings (optional - comment out if you prefer default emacs mode)
-      # fish_vi_key_bindings
-    '';
   };
 
   # Enable Docker daemon (for later use)
@@ -238,9 +147,7 @@
     ${pkgs.coreutils}/bin/mkdir -p /home/zp1ke/.config/fish
     ${pkgs.coreutils}/bin/chown zp1ke:users /home/zp1ke/.config
 
-    if [ ! -f /home/zp1ke/.config/fish/config.fish ]; then
-      echo 'direnv hook fish | source' > /home/zp1ke/.config/fish/config.fish
-    fi
+    ${pkgs.coreutils}/bin/install -m 0644 ${./config/config.fish} /home/zp1ke/.config/fish/config.fish
 
     # Always ensure ownership is correct
     ${pkgs.coreutils}/bin/chown -R zp1ke:users /home/zp1ke/.config/fish
@@ -270,79 +177,7 @@
     mkdir -p /home/zp1ke/.config/wezterm
     chown zp1ke:users /home/zp1ke/.config/wezterm
 
-    cat > /home/zp1ke/.config/wezterm/wezterm.lua <<EOF
-    -- WezTerm Configuration for NixOS
-    -- Reconciled with Kubuntu config
-
-    local wezterm = require 'wezterm'
-    local config = {}
-
-    -- Use config builder if available
-    if wezterm.config_builder then
-      config = wezterm.config_builder()
-    end
-
-    -- ===================================
-    -- FONT CONFIGURATION
-    -- ===================================
-    config.font = wezterm.font('FiraCode Nerd Font')
-    config.font_size = 14.0
-
-    -- ===================================
-    -- APPEARANCE
-    -- ===================================
-    -- Automatic theme switching based on system appearance.
-    function scheme_for_appearance(appearance)
-      if appearance:find('Dark') then
-        return 'Tokyo Night'
-      else
-        return 'Catppuccin Latte'
-      end
-    end
-
-    config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
-
-    -- ===================================
-    -- WINDOW CONFIGURATION
-    -- ===================================
-    -- Window decorations
-    config.window_decorations = "RESIZE"
-    config.window_background_opacity = 0.9
-
-    -- Initial Size
-    config.initial_cols = 120
-    config.initial_rows = 30
-
-    -- Padding
-    config.window_padding = {
-      left = 10,
-      right = 10,
-      top = 10,
-      bottom = 10,
-    }
-
-    -- ===================================
-    -- TAB BAR
-    -- ===================================
-    config.enable_tab_bar = true
-    config.hide_tab_bar_if_only_one_tab = false
-    config.use_fancy_tab_bar = true
-    config.tab_bar_at_bottom = false
-
-    -- ===================================
-    -- SCROLLBACK
-    -- ===================================
-    config.scrollback_lines = 3500
-    config.enable_scroll_bar = true
-
-    -- ===================================
-    -- SHELL CONFIGURATION
-    -- ===================================
-    -- Set fish as default if not set by system
-    -- config.default_prog = { '/run/current-system/sw/bin/fish', '-l' }
-
-    return config
-    EOF
+    ${pkgs.coreutils}/bin/install -m 0644 ${./config/wezterm.lua} /home/zp1ke/.config/wezterm/wezterm.lua
 
     chown zp1ke:users /home/zp1ke/.config/wezterm/wezterm.lua
   '';}
