@@ -92,10 +92,7 @@
     microsoft-edge   # Browser with Workspaces support
     bibata-cursors   # Modern cursor theme
     vscode           # Editor
-
-    # KDE Tools (Required for theme scripts)
-    kdePackages.qttools # For qdbus6
-    kdePackages.kconfig # For kwriteconfig6
+    wezterm          # Terminal
   ];
 
   # --- 6.1 ENVIRONMENT VARIABLES ---
@@ -132,30 +129,21 @@
     mkdir -p /home/zp1ke/.config
     chown zp1ke:users /home/zp1ke/.config
     cat > /home/zp1ke/.config/starship.toml <<EOF
-    # Tokyo Night inspired palette (Dynamic)
-    palette = "tokyo_night"
+    # Standard ANSI Color Config
 
-    [palettes.tokyo_night]
-    red = "#f7768e"
-    orange = "#ff9e64"
-    yellow = "#e0af68"
-    green = "#9ece6a"
-    blue = "#7aa2f7"
-    purple = "#bb9af7"
-    cyan = "#7dcfff"
-    white = "#a9b1d6"
-    bg = "#1a1b26"
+    # We delegate color choices to the terminal emulator
 
-    [palettes.tokyo_day]
-    red = "#f52a65"
-    orange = "#b15c00"
-    yellow = "#8c6c3c"
-    green = "#587539"
-    blue = "#385fbf"
-    purple = "#7847bd"
-    cyan = "#007197"
-    white = "#3760bf"
-    bg = "#e1e2e7"
+    [directory]
+    style = "bold blue"
+
+    [git_branch]
+    style = "bold purple"
+
+    [git_status]
+    style = "bold red"
+
+    [package]
+    style = "bold yellow"
 
     [character]
     success_symbol = "[➜](bold green)"
@@ -248,55 +236,50 @@
     options = "--delete-older-than 7d";
   };
 
-  # --- 12. AUTOMATED TASK: AUTO KONSOLE THEME ---
-  systemd.user.services.auto-konsole-theme = {
-    description = "Auto-switch Konsole theme based on system color scheme";
-    serviceConfig.Type = "oneshot";
-    # Ensure the script can find these commands
-    path = with pkgs; [
-      bash
-      gnugrep
-      kdePackages.qttools # for qdbus6
-      kdePackages.kconfig # for kwriteconfig6
-    ];
-    script = builtins.readFile ./scripts/auto-konsole-theme.sh;
-  };
+  # --- 12. WEZTERM CONFIGURATION ---
+  system.activationScripts.setupWezterm = ''
+    mkdir -p /home/zp1ke/.config/wezterm
+    chown zp1ke:users /home/zp1ke/.config/wezterm
 
-  systemd.user.timers.auto-konsole-theme = {
-    wantedBy = [ "timers.target" ];
-    partOf = [ "auto-konsole-theme.service" ];
-    timerConfig = {
-      OnCalendar = "*:0/5"; # Run every 5 minutes
-      OnStartupSec = "1s";   # Run immediately after login
-      Unit = "auto-konsole-theme.service";
-    };
-  };
+    cat > /home/zp1ke/.config/wezterm/wezterm.lua <<EOF
+    local wezterm = require 'wezterm'
+    local config = wezterm.config_builder()
 
-  # --- 13. GENERATE KONSOLE PROFILES ---
-  system.activationScripts.setupKonsoleProfiles = ''
-    mkdir -p /home/zp1ke/.local/share/konsole
-    ${pkgs.coreutils}/bin/chown zp1ke:users /home/zp1ke/.local
-    ${pkgs.coreutils}/bin/chown zp1ke:users /home/zp1ke/.local/share
+    -- 1. Appearance / Theme Logic
+    -- This function polls the system theme automatically
+    function scheme_for_appearance(appearance)
+      if appearance:find 'Dark' then
+        return 'Catppuccin Mocha'
+      else
+        return 'Catppuccin Latte'
+      end
+    end
 
-    # Write Dark Profile
-    cat > /home/zp1ke/.local/share/konsole/Dark.profile <<EOF
-    ${builtins.readFile ./config/konsole/Dark.profile}
+    config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
+
+    -- 2. Font Configuration
+    config.font = wezterm.font 'CaskaydiaCove Nerd Font Mono'
+    config.font_size = 12.0
+
+    -- 3. UI Cleanup (Minimalist look)
+    config.window_decorations = "RESIZE" -- Hides title bar but allows resizing
+    config.window_background_opacity = 0.95
+    config.hide_tab_bar_if_only_one_tab = true
+
+    -- 4. Initial Size
+    config.initial_cols = 120
+    config.initial_rows = 30
+
+    -- 5. Padding
+    config.window_padding = {
+      left = 10,
+      right = 10,
+      top = 10,
+      bottom = 10,
+    }
+
+    return config
     EOF
 
-    # Write Light Profile
-    cat > /home/zp1ke/.local/share/konsole/Light.profile <<EOF
-    ${builtins.readFile ./config/konsole/Light.profile}
-    EOF
-
-    # Write Color Schemes
-    cat > /home/zp1ke/.local/share/konsole/TokyoNight.colorscheme <<EOF
-    ${builtins.readFile ./config/konsole/TokyoNight.colorscheme}
-    EOF
-
-    cat > /home/zp1ke/.local/share/konsole/TokyoDay.colorscheme <<EOF
-    ${builtins.readFile ./config/konsole/TokyoDay.colorscheme}
-    EOF
-
-    # Fix permissions
-    ${pkgs.coreutils}/bin/chown -R zp1ke:users /home/zp1ke/.local/share/konsole
+    chown zp1ke:users /home/zp1ke/.config/wezterm/wezterm.lua
   '';}
