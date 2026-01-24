@@ -56,7 +56,7 @@ end
 # Fd (better find)
 if type -q fd
     alias find="fd"
-elseif type -q fdfind
+else if type -q fdfind
     alias find="fdfind"
 end
 
