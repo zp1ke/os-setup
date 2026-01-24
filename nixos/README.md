@@ -5,15 +5,15 @@ A minimal yet powerful NixOS configuration featuring KDE Plasma 6, ZSH with mode
 ## Features
 
 - **Desktop Environment**: KDE Plasma 6 (via SDDM with Wayland).
-- **Shell**: ZSH enhanced with Oh-My-Zsh, autosuggestions, and syntax highlighting.
+- **Shell**: Fish shell, configured with modern defaults.
 - **Terminal Modernization**:
-  - `starship`: Customizable prompt with **Tokyo Night** palette.
+  - `starship`: Customizable prompt.
   - `eza`: Modern replacement for `ls` with icons.
   - `bat`: Modern replacement for `cat` with syntax highlighting.
   - `zoxide`: Smarter `cd`.
   - `ripgrep`, `fd`, `fzf` for fast searching.
-- **Automation**:
-  - **Dynamic Theme Switching**: Automatic Konsole profile switching (Light/Dark) based on screen brightness.
+  - **WezTerm**: GPU-accelerated terminal emulator configured via Lua.
+- **Bootloader**: GRUB with `distro-grub-themes` support.
 - **Software**: Microsoft Edge, VS Code, Btop.
 - **Hardware Config**: Includes specific settings for UEFI boot, brightness control, and optional proprietary Nvidia drivers.
 
@@ -73,7 +73,7 @@ Replace the default `configuration.nix` with the one provided in this directory.
 sudo nano /mnt/etc/nixos/configuration.nix
 # Paste the content of configuration.nix here
 ```
-*Note: You also need to create the scripts directory and file manually if using this method, which is tedious. Consider Option B.*
+*Note: You also need to create the config directory and files manually if using this method, which is tedious. Consider Option B.*
 
 #### Option B: Transfer via SSH (If Paste Fails)
 If VirtualBox/VMware clipboard sharing isn't working:
@@ -133,8 +133,7 @@ If VirtualBox/VMware clipboard sharing isn't working:
    # Copy configuration file
    sudo cp ~/configuration.nix /mnt/etc/nixos/configuration.nix
 
-   # Copy scripts and config folders
-   sudo cp -r ~/scripts /mnt/etc/nixos/
+   # Copy config folder (contains starship, fish, wezterm configs)
    sudo cp -r ~/config /mnt/etc/nixos/
    ```
 
@@ -197,6 +196,6 @@ After rebooting, you might not be able to log in to the graphical session immedi
 ## Included Aliases
 
 The configuration includes several ZSH aliases for convenience:
-
+Fish aliases/abbreviation
 - `ls`, `ll`, `la` -> Mapped to `eza` (icons, git status, directories first).
 - `cat` -> Mapped to `bat` (plain style).
