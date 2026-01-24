@@ -92,11 +92,11 @@
 
   environment.systemPackages = with pkgs; [
     # Core Utils
-    git
-    wget
-    curl
+    git              # Version control
+    wget             # Download files from the web
+    curl             # Transfer data from or to a server
     btop             # Modern task manager
-    tree
+    tree             # Display directory structure
     jq               # Command-line JSON processor
 
     # Terminal "Cool Factor" Tools
@@ -110,19 +110,36 @@
     fd               # The 'find' replacement (user friendly)
 
     # Fish Plugins
-    fishPlugins.bass
-    fishPlugins.colored-man-pages
+    fishPlugins.bass              # Load bash utilities in Fish
+    fishPlugins.colored-man-pages # Colorize
 
     # Desktop Apps
+    (symlinkJoin {
+      name = "github-desktop";
+      paths = [ github-desktop ];
+      postBuild = ''
+        if [ -L "$out/share/applications" ]; then
+          rm "$out/share/applications"
+          mkdir -p "$out/share/applications"
+          ln -s ${github-desktop}/share/applications/* "$out/share/applications/"
+        fi
+        rm "$out/share/applications/github-desktop.desktop"
+        sed 's/^Categories=.*/Categories=Development;/' \
+          ${github-desktop}/share/applications/github-desktop.desktop \
+          > $out/share/applications/github-desktop.desktop
+      '';
+    })
     microsoft-edge   # Browser with Workspaces support
-    bibata-cursors   # Modern cursor theme
     vscode           # Editor
     wezterm          # Terminal
+
+    # Other
+    bibata-cursors   # Modern cursor theme
   ];
 
   # --- 6.1 ENVIRONMENT VARIABLES ---
   environment.variables = {
-    # Cursor Theme (Fixes reset on reboot)
+    # Cursor Theme
     XCURSOR_THEME = "Bibata-Modern-Amber";
     XCURSOR_SIZE = "24";
   };
