@@ -23,6 +23,11 @@ Run manually:
 nix develop
 ```
 
+**With IntelliJ included (optional):**
+```bash
+nix develop .#idea
+```
+
 ### 2. VS Code Integration
 
 To get the best experience in VS Code, this template includes a `.vscode` folder with pre-built settings.
@@ -37,6 +42,9 @@ If VS Code complains it cannot find Java or Maven, ensure the `direnv` extension
 ### 3. IntelliJ Settings Persistence
 
 This flake pins IntelliJ settings to a stable directory so your login and preferences do not reset when Nix updates the IDE version.
+To avoid IDE build failures blocking `direnv`, IntelliJ is included only in the optional `.#idea` shell.
+
+You can switch the IntelliJ package by editing the `ideaPkg` variable in the flake (e.g., `pkgs.jetbrains.idea` or `pkgs.jetbrains.idea-oss`).
 
 - IntelliJ config root: `~/.config/idea-nix-config`
 - The shell exports `IDEA_PROPERTIES` to point at a stable `idea.properties` file.
