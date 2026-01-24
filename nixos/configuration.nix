@@ -15,7 +15,9 @@
     device = "nodev";
     configurationLimit = 3;
     # Create a clean derivation for the theme to avoid copying issues
-    theme = pkgs.runCommand "distro-grub-theme" {} ''
+    theme = let
+      selectedTheme = "nixos"; # Change this to any theme name (e.g., "legion", "ubuntu", "windows-11")
+    in pkgs.runCommand "distro-grub-theme" { inherit selectedTheme; } ''
       mkdir -p $out
       tarball="${builtins.fetchTarball {
         url = "https://github.com/AdisonCavani/distro-grub-themes/archive/v3.2.tar.gz";
@@ -23,12 +25,10 @@
       }}"
 
       # Find the theme directory (account for packed tarballs)
-      if [ -f "$tarball/themes/nixos.tar" ]; then
-        tar -xf "$tarball/themes/nixos.tar" -C "$out/"
-      elif [ -f "$tarball/themes/NixOS.tar" ]; then
-        tar -xf "$tarball/themes/NixOS.tar" -C "$out/"
+      if [ -f "$tarball/themes/$selectedTheme.tar" ]; then
+        tar -xf "$tarball/themes/$selectedTheme.tar" -C "$out/"
       else
-        echo "Error: Could not find nixos.tar theme in $tarball"
+        echo "Error: Could not find $selectedTheme.tar theme in $tarball"
         echo "Available themes:"
         ls "$tarball/themes"
         exit 1
