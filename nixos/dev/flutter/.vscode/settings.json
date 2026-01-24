@@ -1,0 +1,5 @@
+{
+  "dart.flutterSdkPath": "${env:FLUTTER_ROOT}",
+  "android.sdk.path": "${env:ANDROID_SDK_ROOT}",
+  "editor.formatOnSave": true
+}
