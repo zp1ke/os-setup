@@ -7,9 +7,34 @@
     ];
 
   # --- 1. BOOTLOADER ---
-  # For modern UEFI Systems (Standard for most VMs now)
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 3; # Limit boot entries to the last 3
+  # Switch to GRUB for themes support (distro-grub-themes)
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.grub = {
+    enable = true;
+    efiSupport = true;
+    device = "nodev";
+    configurationLimit = 3;
+    # Create a clean derivation for the theme to avoid copying issues
+    theme = pkgs.runCommand "distro-grub-theme" {} ''
+      mkdir -p $out
+      tarball="${builtins.fetchTarball {
+        url = "https://github.com/AdisonCavani/distro-grub-themes/archive/v3.2.tar.gz";
+        # sha256 = "0c2fe66895c1655025e17da9d80365116744040da2586820573e33f3747180de"; # Commented out to avoid hash mismatch
+      }}"
+
+      # Find the theme directory (account for packed tarballs)
+      if [ -f "$tarball/themes/nixos.tar" ]; then
+        tar -xf "$tarball/themes/nixos.tar" -C "$out/"
+      elif [ -f "$tarball/themes/NixOS.tar" ]; then
+        tar -xf "$tarball/themes/NixOS.tar" -C "$out/"
+      else
+        echo "Error: Could not find nixos.tar theme in $tarball"
+        echo "Available themes:"
+        ls "$tarball/themes"
+        exit 1
+      fi
+    '';
+  };
   boot.loader.efi.canTouchEfiVariables = true;
 
   # --- 2. NETWORKING & LOCALE ---
