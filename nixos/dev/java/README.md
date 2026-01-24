@@ -34,7 +34,23 @@ To get the best experience in VS Code, this template includes a `.vscode` folder
 
 If VS Code complains it cannot find Java or Maven, ensure the `direnv` extension is active and has allowed the env.
 
-### 3. Switching Java Versions
+### 3. IntelliJ Settings Persistence
+
+This flake pins IntelliJ settings to a stable directory so your login and preferences do not reset when Nix updates the IDE version.
+
+- IntelliJ config root: `~/.config/idea-nix-config`
+- The shell exports `IDEA_PROPERTIES` to point at a stable `idea.properties` file.
+
+If you want to reset IntelliJ completely, delete `~/.config/idea-nix-config`.
+
+### 4. Tooling Caches
+
+The dev shell uses standard cache locations to keep builds fast across sessions:
+
+- Gradle: `~/.cache/gradle`
+- Maven: `~/.m2`
+
+### 5. Switching Java Versions
 
 To switch between Java 8, 17, or 21:
 
