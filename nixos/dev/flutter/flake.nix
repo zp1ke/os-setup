@@ -13,6 +13,7 @@
           inherit system;
           config = {
             android_sdk.accept_license = true;
+            allowUnfree = true;
           };
         };
 
