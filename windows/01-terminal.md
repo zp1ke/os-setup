@@ -1,37 +1,161 @@
-# Terminal Setup
+# Terminal Setup - Windows
 
-## Install FiraCode Nerd Font
+This guide sets up WezTerm as the terminal emulator with PowerShell and Starship prompt, matching the workflow on other platforms while optimized for Windows.
 
-Download [FiraCode.zip](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip), extract, and install fonts.
+## 1. Install Fonts
 
-## Install Starship
+Install Nerd Fonts (FiraCode) for icons and ligatures support.
 
-```shell
+```powershell
+winget install -e --id DEVCOM.JetBrainsMonoNerdFont
+```
+
+Or install FiraCode specifically:
+```powershell
+winget search "Nerd Font"
+# Choose from available options, e.g.:
+winget install -e --id "Gyan.Nerd-Fonts.FiraCode"
+```
+
+## 2. Install WezTerm
+
+Install WezTerm terminal emulator for a modern cross-platform experience.
+
+```powershell
+winget install --id wez.wezterm
+```
+
+**Configuration**:
+Copy the provided configuration file to your home directory:
+
+```powershell
+cp config/wezterm.lua $env:USERPROFILE\.wezterm.lua
+```
+
+## 3. Install Starship Prompt
+
+The cross-shell prompt that makes your terminal generic and informative.
+
+```powershell
 winget install --id Starship.Starship
+```
+
+**Configuration**:
+Copy the configuration file:
+
+```powershell
+mkdir -Force $env:USERPROFILE\.config
+cp config/starship.toml $env:USERPROFILE\.config\starship.toml
 ```
 
 See [installation](https://starship.rs/guide/) and [configuration](https://starship.rs/config/) docs.
 
-## Install Eza
+## 4. Install Modern CLI Tools
 
-```shell
+Enhance the terminal experience with modern replacements for standard tools.
+
+### Eza (Better `ls`)
+
+```powershell
 winget install eza-community.eza
 ```
 
-Add to PowerShell profile (`$PROFILE`):
+### Bat (Better `cat`)
 
 ```powershell
-Remove-Item Alias:ls -ErrorAction SilentlyContinue
+winget install sharkdp.bat
+```
 
+### Zoxide (Smarter `cd`)
+
+```powershell
+winget install ajeetdsouza.zoxide
+```
+
+### Ripgrep (Better `grep`)
+
+```powershell
+winget install BurntSushi.ripgrep.MSVC
+```
+
+### Fd (Better `find`)
+
+```powershell
+winget install sharkdp.fd
+```
+
+### Fzf (Fuzzy Finder)
+
+```powershell
+winget install fzf
+```
+
+### Additional Tools
+
+```powershell
+winget install Git.Git
+winget install jqlang.jq
+```
+
+## 5. Configure PowerShell Profile
+
+Add the following to your PowerShell profile (`$PROFILE`):
+
+```powershell
+# Starship prompt
+Invoke-Expression (&starship init powershell)
+
+# Zoxide (smarter cd)
+Invoke-Expression (& { (zoxide init powershell | Out-String) })
+
+# Eza aliases (better ls)
+Remove-Item Alias:ls -ErrorAction SilentlyContinue
 function ls {
   eza --icons @args
 }
-
 function ll {
-  eza -l --icons @args
+  eza -l --icons --git --group-directories-first @args
+}
+function la {
+  eza -la --icons --git --group-directories-first @args
 }
 
-function la {
-  eza -la --icons @args
+# Bat alias (better cat)
+function cat {
+  bat --style=plain @args
 }
+
+# Zoxide alias
+Set-Alias -Name cd -Value z -Option AllScope -Scope Global -Force
+```
+
+To edit your profile:
+```powershell
+notepad $PROFILE
+```
+
+If the profile doesn't exist, create it first:
+```powershell
+New-Item -Path $PROFILE -Type File -Force
+```
+
+## 6. Restart Terminal
+
+Close and reopen your terminal (or launch WezTerm) to see the changes take effect.
+
+## Verification
+
+After setup, verify everything is working:
+
+```powershell
+# Check versions
+starship --version
+eza --version
+bat --version
+zoxide --version
+
+# Test modern tools
+ls    # Should show icons (via eza)
+ll    # Detailed list with icons
+cat $PROFILE  # Should use bat with syntax highlighting
 ```
