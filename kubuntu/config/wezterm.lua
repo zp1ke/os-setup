@@ -55,8 +55,25 @@ config.tab_bar_at_bottom = false
 -- ===================================
 -- SCROLLBACK
 -- ===================================
-config.scrollback_lines = 3500
+config.scrollback_lines = 10000
 config.enable_scroll_bar = true
+
+-- Fix scrollback when SSH'd to remote servers
+config.enable_kitty_keyboard = false
+
+-- Ensure mouse wheel scrolls the scrollback buffer
+config.mouse_bindings = {
+  {
+    event = { Down = { streak = 1, button = { WheelUp = 1 } } },
+    mods = 'NONE',
+    action = wezterm.action.ScrollByLine(-3),
+  },
+  {
+    event = { Down = { streak = 1, button = { WheelDown = 1 } } },
+    mods = 'NONE',
+    action = wezterm.action.ScrollByLine(3),
+  },
+}
 
 -- ===================================
 -- SHELL CONFIGURATION
