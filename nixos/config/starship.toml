@@ -1,48 +1,59 @@
-# Starship Prompt Configuration
-# Standard ANSI Color Config
-# We delegate color choices to the terminal emulator
+# Starship Configuration
+# Shared template across Windows/Kubuntu/macOS/NixOS
+
+format = """
+[┌─](bold green)$username$hostname$directory$git_branch$git_status
+[└─](bold green)$character"""
+
+[username]
+show_always = false
+format = "[$user]($style)@"
+
+[hostname]
+ssh_only = false
+format = "[$hostname]($style) "
+disabled = false
 
 [directory]
-style = "bold blue"
+truncation_length = 3
+truncate_to_repo = true
+format = "[$path]($style)[$read_only]($read_only_style) "
 
 [git_branch]
-style = "bold purple"
+symbol = " "
+format = "on [$symbol$branch]($style) "
 
 [git_status]
-style = "bold red"
-
-[package]
-style = "bold yellow"
+format = '([\[$all_status$ahead_behind\]]($style) )'
 
 [character]
 success_symbol = "[➜](bold green)"
 error_symbol = "[➜](bold red)"
 
-# Optional: Show command duration for long-running commands
 [cmd_duration]
 min_time = 500
-format = "took [$duration](bold yellow)"
+format = "took [$duration]($style) "
 
-# Optional: Show battery status on laptops
-[battery]
-full_symbol = "🔋"
-charging_symbol = "⚡"
-discharging_symbol = "💀"
+[python]
+symbol = " "
+format = 'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 
-[[battery.display]]
-threshold = 30
-style = "bold red"
+[nodejs]
+symbol = " "
+format = 'via [$symbol($version )]($style)'
 
-# Optional: Show time
-[time]
-disabled = true
-format = '🕙[\[ $time \]]($style) '
-time_format = "%T"
+[rust]
+symbol = " "
+format = 'via [$symbol($version )]($style)'
 
-# Optional: Show username@hostname
-[username]
-style_user = "bold dimmed blue"
-show_always = false
+[java]
+symbol = " "
+format = 'via [$symbol($version )]($style)'
 
-[hostname]
-ssh_only = true
+[docker_context]
+symbol = " "
+format = 'via [$symbol$context]($style) '
+
+[package]
+symbol = "📦 "
+format = 'is [$symbol$version]($style) '
