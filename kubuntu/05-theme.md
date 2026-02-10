@@ -27,6 +27,12 @@ cp ./theme/theme-setup.service ~/.config/systemd/user/
 cp ./theme/theme-setup.timer ~/.config/systemd/user/
 ```
 
+Copy Look and Feel presets (so KDE Day/Night cycle finds them):
+```shell
+mkdir -p ~/.local/share/plasma
+cp -r ./config/look-and-feel ~/.local/share/plasma/look-and-feel
+```
+
 Create *~/.config/theme-by-time.conf* with start time (HHMM format) and theme name per line:
 
 Check available themes:

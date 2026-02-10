@@ -193,6 +193,13 @@ After rebooting, you might not be able to log in to the graphical session immedi
    - Press `Ctrl + Alt + F1` (or `F7`).
    - Login with your user.
 
+### KDE Theme Presets (Day/Night Cycle)
+Copy the Look and Feel presets so KDE Day/Night cycle can find them:
+```bash
+mkdir -p ~/.local/share/plasma
+cp -r kubuntu/config/look-and-feel ~/.local/share/plasma/look-and-feel
+```
+
 ## Included Aliases
 
 The configuration includes several ZSH aliases for convenience:
