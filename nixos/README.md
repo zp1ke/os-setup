@@ -1,6 +1,6 @@
 # NixOS Configuration
 
-A minimal yet powerful NixOS configuration featuring KDE Plasma 6, ZSH with modern terminal tools, and essential development utilities. This setup is designed for both Virtual Machines and bare metal (with optional Nvidia support).
+A minimal yet powerful NixOS configuration featuring KDE Plasma 6, Fish shell with modern terminal tools, and essential development utilities. This setup is designed for both Virtual Machines and bare metal (with optional Nvidia support).
 
 ## Features
 
@@ -202,7 +202,6 @@ cp -r kubuntu/config/look-and-feel ~/.local/share/plasma/look-and-feel
 
 ## Included Aliases
 
-The configuration includes several ZSH aliases for convenience:
-Fish aliases/abbreviation
+The configuration includes several Fish aliases/abbreviations for convenience:
 - `ls`, `ll`, `la` -> Mapped to `eza` (icons, git status, directories first).
 - `cat` -> Mapped to `bat` (plain style).

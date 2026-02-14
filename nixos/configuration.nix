@@ -104,7 +104,6 @@
     eza              # Modern replacement for 'ls' (adds icons/colors)
     bat              # Modern replacement for 'cat' (adds syntax highlighting)
     zoxide           # Smarter 'cd' command
-    direnv           # Per-directory environment variables
     fzf              # Command-line fuzzy finder
     ripgrep          # The 'grep' replacement (ultra fast)
     fd               # The 'find' replacement (user friendly)
@@ -184,7 +183,6 @@
   virtualisation.docker.enable = true;
 
   # --- 10. SYSTEM AUTOMATION ---
-  # Create Fish config file with direnv hook
   system.activationScripts.setupFishConfig = ''
     ${pkgs.coreutils}/bin/mkdir -p /home/zp1ke/.config/fish
     ${pkgs.coreutils}/bin/chown zp1ke:users /home/zp1ke/.config
@@ -198,13 +196,8 @@
   # --- 11. SYSTEM STATE ---
   system.stateVersion = "25.11";
 
-  # --- 11.5 NIX SETTINGS (Flakes & Direnv) ---
+  # --- 11.1 NIX SETTINGS (Flakes) ---
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true; # Better caching for nix flakes
-  };
 
   # --- 11.6 GARBAGE COLLECTION ---
   # Automatically free up space by deleting old generations

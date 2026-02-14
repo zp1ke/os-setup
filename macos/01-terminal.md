@@ -47,7 +47,6 @@ Install the "Cool Factor" tools from the NixOS configuration:
 brew install eza      # Better 'ls'
 brew install bat      # Better 'cat'
 brew install zoxide   # Smarter 'cd'
-brew install direnv   # Per-directory environments
 brew install fzf      # Fuzzy finder
 brew install ripgrep  # Better 'grep'
 brew install fd       # Better 'find'

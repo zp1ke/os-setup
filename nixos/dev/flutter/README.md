@@ -5,20 +5,13 @@ This folder contains a reproducible development environment for Flutter using Ni
 ## Prerequisites
 
 - **Nix** with Flakes enabled.
-- **Direnv** (optional but recommended).
 
 ## Usage
 
 ### 1. Enter the Environment
 
-**With direnv (Recommended):**
 ```bash
 cd nixos/dev/flutter
-direnv allow
-```
-
-**Without direnv:**
-```bash
 nix develop
 ```
 
@@ -29,7 +22,7 @@ This will load **Flutter** and the **Android SDK** (no Android Studio).
 This template includes pre-configured VS Code settings.
 
 1. Open this folder: `code .`
-2. Install the recommended extensions (Flutter, Dart, Direnv).
+2. Install the recommended extensions (Flutter, Dart).
 3. The settings map Flutter and Android SDK paths from the Nix environment.
 
 ### 3. Android SDK Notes
@@ -43,4 +36,4 @@ This template includes pre-configured VS Code settings.
 To change SDK versions:
 1. Open `flake.nix`.
 2. Edit the `platformVersions`, `buildToolsVersions`, or `platformToolsVersion` entries.
-3. Reload the shell (`direnv reload` or `nix develop`).
+3. Reload the shell (`nix develop`).

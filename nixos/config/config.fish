@@ -11,10 +11,6 @@ set fish_greeting
 # ===================================
 set -gx STARSHIP_CONFIG "$HOME/.config/starship.toml"
 
-if type -q direnv
-    direnv hook fish | source
-end
-
 # ===================================
 # 3. INTEGRATIONS
 # ===================================
