@@ -67,3 +67,8 @@ if (Get-Module -ListAvailable -Name PSReadLine) {
 # ===================================
 # Disable default greeting
 $PSStyle.FileInfo.Directory = "`e[34m"
+
+# Mise (runtime manager)
+if (Get-Command mise -ErrorAction SilentlyContinue) {
+    (&mise activate pwsh) | Out-String | Invoke-Expression
+}

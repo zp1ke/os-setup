@@ -99,44 +99,11 @@ winget install jqlang.jq
 
 ## 5. Configure PowerShell Profile
 
-Add the following to your PowerShell profile (`$PROFILE`):
+Copy the provided PowerShell profile to `$PROFILE`:
 
-```powershell
-# Starship prompt
-Invoke-Expression (&starship init powershell)
-
-# Zoxide (smarter cd)
-Invoke-Expression (& { (zoxide init powershell | Out-String) })
-
-# Eza aliases (better ls)
-Remove-Item Alias:ls -ErrorAction SilentlyContinue
-function ls {
-  eza --icons @args
-}
-function ll {
-  eza -l --icons --git --group-directories-first @args
-}
-function la {
-  eza -la --icons --git --group-directories-first @args
-}
-
-# Bat alias (better cat)
-function cat {
-  bat --style=plain @args
-}
-
-# Zoxide alias
-Set-Alias -Name cd -Value z -Option AllScope -Scope Global -Force
-```
-
-To edit your profile:
-```powershell
-notepad $PROFILE
-```
-
-If the profile doesn't exist, create it first:
 ```powershell
 New-Item -Path $PROFILE -Type File -Force
+cp windows/config/Microsoft.PowerShell_profile.ps1 $PROFILE
 ```
 
 ## 6. Restart Terminal
