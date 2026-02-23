@@ -38,6 +38,59 @@ Copy the provided configuration file to your home directory:
 cp config/wezterm.lua ~/.wezterm.lua
 ```
 
+### Set WezTerm as Default Terminal
+
+To replace Konsole with WezTerm in the context menu (right-click "Open Terminal Here"):
+
+**Option 1: Change KDE's Default Terminal**
+
+Set WezTerm as the system default terminal emulator:
+
+```bash
+# Update KDE's default terminal setting (Plasma 6)
+kwriteconfig6 --file kdeglobals --group General --key TerminalApplication wezterm
+kwriteconfig6 --file kdeglobals --group General --key TerminalService wezterm.desktop
+```
+
+**Option 2: Create Custom Service Menu**
+
+Create a custom service menu for WezTerm in Dolphin:
+
+```bash
+mkdir -p ~/.local/share/kio/servicemenus
+cat > ~/.local/share/kio/servicemenus/open-wezterm-here.desktop << 'EOF'
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=inode/directory;
+Actions=openWeztermHere;
+
+[Desktop Action openWeztermHere]
+Name=Open WezTerm Here
+Icon=utilities-terminal
+Exec=wezterm start --cwd %f
+EOF
+```
+
+If you want to hide the Konsole option, you can disable it:
+
+```bash
+# Find and move or rename the Konsole service menu
+mkdir -p ~/.local/share/kio/servicemenus/disabled
+# The Konsole menu might be in different locations, common one:
+if [ -f /usr/share/kio/servicemenus/konsolehere.desktop ]; then
+    cp /usr/share/kio/servicemenus/konsolehere.desktop ~/.local/share/kio/servicemenus/disabled/
+fi
+# Create an override to hide it
+cat > ~/.local/share/kio/servicemenus/konsolehere.desktop << 'EOF'
+[Desktop Entry]
+Type=Service
+Hidden=true
+EOF
+```
+
+After making changes, restart Dolphin or logout/login for changes to take effect.
+
 ## 3. Install Fish Shell
 
 Install the latest Fish shell.
