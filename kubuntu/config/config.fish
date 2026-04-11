@@ -60,4 +60,4 @@ end
 alias ..="cd .."
 
 # System update
-alias update-system="sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y"
+alias update-system="echo 'Updating APT packages...' && sudo apt update && sudo apt upgrade && sudo apt autoremove && echo && echo 'Updating Snap packages...' && sudo snap refresh && echo && echo 'Updating Mise...' && mise self-update"
