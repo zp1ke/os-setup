@@ -65,27 +65,21 @@ After changing, log out and log back in for full effect.
 - **Synchronizer**: Compare and sync directories
 - **Custom commands**: Add your own commands and scripts
 
-### Configure WezTerm Integration
+### Configure Konsole Integration
 
-To make Krusader use WezTerm instead of Konsole:
+Use Konsole as Krusader's external terminal:
 
 1. **Set External Terminal**:
    - Open Krusader → Settings → Configure Krusader
    - Go to General → Terminal
-   - Set external terminal to: `wezterm`
+   - Set external terminal to: `konsole`
 
-2. **Update Terminal Execution for User Actions**:
+2. **Set Terminal Execution for User Actions**:
    - Go to Settings → Configure Krusader → User Actions
-   - In the "Terminal execution" field, replace:
+   - In the "Terminal execution" field, use:
 
    ```
    konsole --noclose --workdir %d --title %t -e
-   ```
-
-   with:
-
-   ```
-   wezterm start --cwd %d --
    ```
 
 ### Tips

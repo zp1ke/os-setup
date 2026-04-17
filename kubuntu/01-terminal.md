@@ -1,6 +1,6 @@
 # Terminal Setup - Kubuntu
 
-This guide sets up WezTerm as the terminal emulator with Fish shell and Starship prompt, matching the workflow on other platforms while optimized for Kubuntu.
+This guide uses KDE Konsole with Fish shell and Starship prompt, matching the same cross-platform workflow.
 
 ## 1. Install Fonts
 
@@ -17,80 +17,52 @@ fc-cache -fv
 rm FiraCode.zip LICENSE README.md
 ```
 
-## 2. Install WezTerm
+## 2. Configure Konsole
 
-Install the latest WezTerm from the official repository.
+Konsole is the default terminal on Kubuntu. Ensure it is installed and set as the default terminal handler.
 
 ```bash
-# Add the GPG key and repository
-curl -fsSL https://apt.fury.io/wez/gpg.key | sudo gpg --yes --dearmor -o /usr/share/keyrings/wezterm-fury.gpg
-echo 'deb [signed-by=/usr/share/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | sudo tee /etc/apt/sources.list.d/wezterm.list
-sudo chmod 644 /usr/share/keyrings/wezterm-fury.gpg
-
-# Install
 sudo apt update
-sudo apt install wezterm
+sudo apt install -y konsole
+
+# Keep Konsole as KDE's default terminal entry points (Plasma 6)
+kwriteconfig6 --file kdeglobals --group General --key TerminalApplication konsole
+kwriteconfig6 --file kdeglobals --group General --key TerminalService org.kde.konsole.desktop
 ```
 
-**Configuration**:
-Copy the provided configuration file to your home directory:
+### Create a Konsole profile (recommended defaults)
+
+Create a profile with these defaults:
+
+- Font: `FiraCode Nerd Font`
+- Font size: `14`
+- Initial size: `120x30`
+- Scrollback: `10000`
+- Shell: `fish`
 
 ```bash
-cp config/wezterm.lua ~/.wezterm.lua
+mkdir -p ~/.local/share/konsole
+cp config/konsole/Main.profile ~/.local/share/konsole/Main.profile
+
+# Make this profile the default
+kwriteconfig6 --file konsolerc --group Desktop Entry --key DefaultProfile Main.profile
 ```
 
-### Set WezTerm as Default Terminal
+### Match the remaining behavior in GUI
 
-To replace Konsole with WezTerm in the context menu (right-click "Open Terminal Here"):
+Konsole does not map every setting in a single file, so set these in Konsole UI:
 
-**Option 1: Change KDE's Default Terminal**
+1. Open Konsole -> `Settings` -> `Edit Current Profile...`
+2. `Appearance`:
+    - Select a theme close to your preference (`Breeze`, `Breeze Dark`, or imported scheme)
+    - Set background transparency around `90%` (if compositor/transparency is enabled)
+3. `Tabs`:
+    - Keep tab bar visible to mirror always-on tab behavior
+4. `Scrolling`:
+    - Keep scrollbar visible
+    - Confirm scrollback is `10000`
 
-Set WezTerm as the system default terminal emulator:
-
-```bash
-# Update KDE's default terminal setting (Plasma 6)
-kwriteconfig6 --file kdeglobals --group General --key TerminalApplication wezterm
-kwriteconfig6 --file kdeglobals --group General --key TerminalService wezterm.desktop
-```
-
-**Option 2: Create Custom Service Menu**
-
-Create a custom service menu for WezTerm in Dolphin:
-
-```bash
-mkdir -p ~/.local/share/kio/servicemenus
-cat > ~/.local/share/kio/servicemenus/open-wezterm-here.desktop << 'EOF'
-[Desktop Entry]
-Type=Service
-ServiceTypes=KonqPopupMenu/Plugin
-MimeType=inode/directory;
-Actions=openWeztermHere;
-
-[Desktop Action openWeztermHere]
-Name=Open WezTerm Here
-Icon=utilities-terminal
-Exec=wezterm start --cwd %f
-EOF
-```
-
-If you want to hide the Konsole option, you can disable it:
-
-```bash
-# Find and move or rename the Konsole service menu
-mkdir -p ~/.local/share/kio/servicemenus/disabled
-# The Konsole menu might be in different locations, common one:
-if [ -f /usr/share/kio/servicemenus/konsolehere.desktop ]; then
-    cp /usr/share/kio/servicemenus/konsolehere.desktop ~/.local/share/kio/servicemenus/disabled/
-fi
-# Create an override to hide it
-cat > ~/.local/share/kio/servicemenus/konsolehere.desktop << 'EOF'
-[Desktop Entry]
-Type=Service
-Hidden=true
-EOF
-```
-
-After making changes, restart Dolphin or logout/login for changes to take effect.
+Restart Konsole after creating/changing profiles.
 
 ## 3. Install Fish Shell
 
@@ -173,18 +145,3 @@ sudo apt install fd-find
 ```bash
 sudo apt install fzf
 ```
-
----
-
-## Alternative: Konsole Setup
-
-If you prefer sticking with the default KDE Konsole, use the provided profile.
-
-Create profile file `~/.local/share/konsole/USER.profile`:
-
-```bash
-mkdir -p ~/.local/share/konsole
-# You can copy the content from elsewhere or configure it via GUI
-```
-
-Profile content references `FiraCode Nerd Font`.
