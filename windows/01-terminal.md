@@ -1,10 +1,10 @@
 # Terminal Setup - Windows
 
-This guide sets up WezTerm as the terminal emulator with PowerShell and Starship prompt, matching the workflow on other platforms while optimized for Windows.
+This guide sets up Microsoft Terminal with PowerShell and Starship prompt, matching the workflow on other platforms while staying native to Windows.
 
 ## 1. Install Fonts
 
-Install Nerd Fonts (FiraCode) for icons and ligatures support.
+Install a Nerd Font for icons and ligatures support.
 
 ```powershell
 winget install -e --id DEVCOM.JetBrainsMonoNerdFont
@@ -17,20 +17,24 @@ winget search "Nerd Font"
 winget install -e --id "Gyan.Nerd-Fonts.FiraCode"
 ```
 
-## 2. Install WezTerm
+## 2. Install Microsoft Terminal
 
-Install WezTerm terminal emulator for a modern cross-platform experience.
+Install Microsoft Terminal. It is often preinstalled on Windows 11, but using `winget` keeps the setup explicit.
 
 ```powershell
-winget install --id wez.wezterm
+winget install --id Microsoft.WindowsTerminal
 ```
 
 **Configuration**:
-Copy the provided configuration file to your home directory:
+Copy the provided settings file into Microsoft Terminal's settings location:
 
 ```powershell
-cp config/wezterm.lua $env:USERPROFILE\.wezterm.lua
+$terminalSettings = Join-Path $env:LOCALAPPDATA 'Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json'
+Copy-Item $terminalSettings "$terminalSettings.bak" -ErrorAction SilentlyContinue
+Copy-Item windows/config/windows-terminal.settings.json $terminalSettings
 ```
+
+The provided settings keep the same PowerShell-first workflow across the rest of this repository: Nerd Font rendering, 120x30 startup size, padding, acrylic transparency, and longer scrollback.
 
 ## 3. Install Starship Prompt
 
@@ -45,7 +49,7 @@ Copy the configuration file:
 
 ```powershell
 mkdir -Force $env:USERPROFILE\.config
-cp config/starship.toml $env:USERPROFILE\.config\starship.toml
+cp windows/config/starship.toml $env:USERPROFILE\.config\starship.toml
 ```
 
 See [installation](https://starship.rs/guide/) and [configuration](https://starship.rs/config/) docs.
@@ -108,7 +112,7 @@ cp windows/config/Microsoft.PowerShell_profile.ps1 $PROFILE
 
 ## 6. Restart Terminal
 
-Close and reopen your terminal (or launch WezTerm) to see the changes take effect.
+Close and reopen Microsoft Terminal to see the changes take effect.
 
 ## Verification
 
@@ -125,4 +129,5 @@ zoxide --version
 ls    # Should show icons (via eza)
 ll    # Detailed list with icons
 cat $PROFILE  # Should use bat with syntax highlighting
+wt    # Should launch Microsoft Terminal
 ```
