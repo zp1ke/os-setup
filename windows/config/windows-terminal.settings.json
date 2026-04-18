@@ -21,6 +21,7 @@
         "guid": "{f4d0d6a0-0b31-4bb6-8cf3-d1b9f7f3599b}",
         "name": "PowerShell",
         "commandline": "pwsh.exe -NoLogo",
+        "startingDirectory": "%USERPROFILE%",
         "hidden": false
       }
     ]

@@ -34,14 +34,22 @@ Copy-Item $terminalSettings "$terminalSettings.bak" -ErrorAction SilentlyContinu
 Copy-Item windows/config/windows-terminal.settings.json $terminalSettings
 ```
 
-The provided settings keep the same PowerShell-first workflow across the rest of this repository: Nerd Font rendering, 120x30 startup size, padding, acrylic transparency, and longer scrollback.
+The provided settings configure:
+- **Nerd Font rendering** for icons and ligatures
+- **120x30 startup size** for a readable workspace
+- **Padding and transparency** for aesthetics
+- **Longer scrollback** (3500 lines) for history
+- **Home directory as starting location** (instead of System32)
 
 ## 3. Install Starship Prompt
 
 The cross-shell prompt that makes your terminal generic and informative.
 
+**Important**: Starship requires PowerShell 7+ (not the legacy Windows PowerShell 5.1 that comes built-in).
+
 ```powershell
 winget install --id Starship.Starship
+winget install --id Microsoft.PowerShell
 ```
 
 **Configuration**:
@@ -51,6 +59,8 @@ Copy the configuration file:
 mkdir -Force $env:USERPROFILE\.config
 cp windows/config/starship.toml $env:USERPROFILE\.config\starship.toml
 ```
+
+Then in Microsoft Terminal settings, select **PowerShell** (not "Windows PowerShell") as your default profile. You can find the latest PowerShell version in the Profiles list after installation.
 
 See [installation](https://starship.rs/guide/) and [configuration](https://starship.rs/config/) docs.
 
@@ -113,6 +123,16 @@ cp windows/config/Microsoft.PowerShell_profile.ps1 $PROFILE
 ## 6. Restart Terminal
 
 Close and reopen Microsoft Terminal to see the changes take effect.
+
+## Note: Fish Shell on Windows
+
+Fish is a Unix shell and does not run natively on Windows. To use Fish on Windows, you must use **Windows Subsystem for Linux (WSL)**:
+
+1. Install WSL: `wsl --install` (requires Windows 10/11)
+2. Install a Linux distro (Ubuntu, Debian, etc.)
+3. Run Fish in the WSL terminal
+
+Alternatively, PowerShell 7+ with Starship provides a modern, cross-platform shell experience comparable to Fish without requiring WSL.
 
 ## Verification
 

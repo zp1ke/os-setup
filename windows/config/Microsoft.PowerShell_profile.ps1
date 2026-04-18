@@ -4,11 +4,15 @@
 # ===================================
 # 1. PROMPT CONFIGURATION
 # ===================================
-# Starship prompt
-Invoke-Expression (&starship init powershell)
-
-# Set Starship config location
-$ENV:STARSHIP_CONFIG = "$HOME\.config\starship.toml"
+# Starship prompt (requires PowerShell 7+)
+if ($PSVersionTable.PSVersion.Major -ge 7) {
+    Invoke-Expression (&starship init powershell)
+    # Set Starship config location
+    $ENV:STARSHIP_CONFIG = "$HOME\.config\starship.toml"
+} else {
+    Write-Host "⚠️  Starship requires PowerShell 7+. You are using PowerShell $($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor)"
+    Write-Host "   Install with: winget install Microsoft.PowerShell"
+}
 
 # ===================================
 # 2. INTEGRATIONS
