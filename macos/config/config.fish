@@ -4,7 +4,14 @@
 # ===================================
 # 1. INIT
 # ===================================
-set fish_greeting
+starship init fish | source
+
+# ===================================
+# MISE (Runtime Manager)
+# ===================================
+if type -q mise
+    mise activate fish | source
+end
 
 # ===================================
 # 2. ENVIRONMENT
@@ -61,3 +68,33 @@ alias ..="cd .."
 
 # System update
 alias update-system="brew update && brew upgrade && brew cleanup"
+
+# ===================================
+# ENVIRONMENT VARIABLES
+# ===================================
+
+# Starship config location
+set -x STARSHIP_CONFIG ~/.config/starship.toml
+
+# Editor preferences
+set -x EDITOR "code"
+set -x VISUAL "code"
+
+# Homebrew
+# Make sure homebrew binaries are in PATH
+fish_add_path /opt/homebrew/bin
+fish_add_path /opt/homebrew/sbin
+
+# ===================================
+# OPTIONAL: VI KEY BINDINGS
+# ===================================
+# Uncomment the following line if you prefer vi key bindings
+# fish_vi_key_bindings
+
+# ===================================
+# FZF INTEGRATION (if installed)
+# ===================================
+# FZF key bindings (Ctrl+R for history search, Ctrl+T for file search)
+if type -q fzf
+    fzf --fish | source
+end

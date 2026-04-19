@@ -182,6 +182,7 @@
   # Enable Docker daemon (for later use)
   virtualisation.docker.enable = true;
 
+  # --- 10. SYSTEM STATE ---
   # --- 10. SYSTEM AUTOMATION ---
   system.activationScripts.setupFishConfig = ''
     ${pkgs.coreutils}/bin/mkdir -p /home/zp1ke/.config/fish
@@ -196,10 +197,10 @@
   # --- 11. SYSTEM STATE ---
   system.stateVersion = "25.11";
 
-  # --- 11.1 NIX SETTINGS (Flakes) ---
+  # --- 10.5 NIX SETTINGS (Flakes) ---
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # --- 11.6 GARBAGE COLLECTION ---
+  # --- 10.6 GARBAGE COLLECTION ---
   # Automatically free up space by deleting old generations
   nix.gc = {
     automatic = true;

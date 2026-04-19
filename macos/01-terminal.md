@@ -1,6 +1,6 @@
 # Terminal Setup - macOS
 
-This guide sets up WezTerm as the terminal emulator with Fish shell and Starship prompt.
+This guide sets up Ghostty as the terminal emulator with Fish shell and Starship prompt.
 
 ## Prerequisites
 
@@ -9,10 +9,10 @@ Install Homebrew if not already installed:
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-## 1. Install WezTerm
+## 1. Install Ghostty
 
 ```bash
-brew install --cask wezterm
+brew install --cask ghostty
 ```
 
 ## 2. Install Fish Shell
@@ -58,7 +58,15 @@ brew install tree
 brew install jq       # JSON processor
 ```
 
-## 5. Install Nerd Fonts
+## 5. Install mise (Runtime Manager)
+
+Use `mise` to manage Java, Node.js, and other developer runtimes instead of separate tools like jenv/fnm/nvm.
+
+```bash
+brew install mise
+```
+
+## 6. Install Nerd Fonts
 
 Required for icons in the terminal:
 
@@ -68,18 +76,18 @@ brew install font-fira-code-nerd-font
 brew install font-caskaydia-cove-nerd-font
 ```
 
-## 6. Deploy Configuration Files
+## 7. Deploy Configuration Files
 
 Copy the configuration files to their proper locations:
 
 ```bash
 # Create config directories
-mkdir -p ~/.config/wezterm
+mkdir -p ~/.config/ghostty
 mkdir -p ~/.config/fish
 mkdir -p ~/.local/share/fish
 
-# Copy WezTerm config
-cp config/wezterm.lua ~/.config/wezterm/wezterm.lua
+# Copy Ghostty config
+cp config/ghostty.conf ~/.config/ghostty/config
 
 # Copy Starship config
 cp config/starship.toml ~/.config/starship.toml
@@ -88,9 +96,9 @@ cp config/starship.toml ~/.config/starship.toml
 cp config/config.fish ~/.config/fish/config.fish
 ```
 
-## 7. Restart Terminal
+## 8. Restart Terminal
 
-Close and reopen your terminal (or launch WezTerm) to see the changes take effect.
+Close and reopen your terminal (or launch Ghostty) to see the changes take effect.
 
 ## Verification
 
@@ -123,7 +131,7 @@ mkdir -p ~/.local/share/fish
 Make sure you've added fish to `/etc/shells` and run `chsh -s $(which fish)`. The fish path varies by Mac architecture (Intel vs Apple Silicon).
 
 ### Icons not displaying
-Make sure you've installed a Nerd Font and selected it in WezTerm's configuration.
+Make sure you've installed a Nerd Font and selected it in Ghostty's configuration.
 
 ### Starship not loading
 Check that `~/.config/starship.toml` exists and Fish is sourcing it via `config.fish`.

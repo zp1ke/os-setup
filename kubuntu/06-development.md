@@ -64,59 +64,46 @@ java -version
 echo $JAVA_HOME
 ```
 
-#### Per-project Java version
+## Mise (Java, Node.js, and More)
 
-Create a `.mise.toml` file in your project:
-```toml
-[tools]
-java = "17"
+[mise](https://mise.jdx.dev/) is the single runtime manager for development tools. Use it instead of jenv/fnm/nvm.
+
+Install mise:
+```shell
+curl https://mise.run | sh
 ```
 
-Or use the command:
+Add to *.bash_dev*:
 ```bash
-cd /path/to/your/project
-mise use java@17
+# mise
+if [ -x "$HOME/.local/bin/mise" ]; then
+  eval "$($HOME/.local/bin/mise activate bash)"
+fi
 ```
 
-### Node.js
-
-This setup uses [mise](https://mise.jdwp.dev/) for Node.js version management.
-
-#### Mise is installed globally
-
-Mise is installed and configured in the "Runtime Environment" section below. Node.js versions are managed through mise.
-
-#### Install Node.js versions
-
-Once mise is configured, install Node.js:
-```bash
-# Install a specific version
-mise install node@20
-mise install node@18
-
-# Set a global default
-mise use --global node@20
-
-# Verify
-node --version
-npm --version
+Install global runtimes:
+```shell
+mise use --global java@temurin-21
+mise use --global node@22
 ```
 
-#### Per-project Node.js version
-
-Create a `.mise.toml` file in your project:
-```toml
-[tools]
-node = "18"
+Project-specific runtimes:
+```shell
+cd /path/to/project
+mise use java@temurin-17 node@20
+mise install
 ```
 
-Or use the command:
-```bash
-cd /path/to/your/project
-mise use node@18
+Verify:
+```shell
+mise --version
+mise ls
+java -version
+node -v
+npm -v
 ```
 
-### Docker
+## Docker
 
 Follow the [installation guide](https://docs.docker.com/engine/install/ubuntu/) and [post-install steps](https://docs.docker.com/engine/install/linux-postinstall/).
 

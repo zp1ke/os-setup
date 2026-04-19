@@ -11,7 +11,6 @@ This folder contains a reproducible development environment for JavaScript/TypeS
 ### 1. Enter the Environment
 
 ```bash
-cd nixos/dev/js
 nix develop
 ```
 
@@ -33,4 +32,4 @@ This template includes pre-configured VS Code settings.
 To switch versions:
 1.  Open `flake.nix`.
 2.  Change `pkgs.nodejs_22` to `pkgs.nodejs_20` or `pkgs.nodejs_18`.
-3.  Reload the shell (`nix develop`).
+3.  Re-enter the shell with `nix develop`.

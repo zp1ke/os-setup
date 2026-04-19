@@ -6,73 +6,68 @@ This guide covers essential development tools for macOS.
 
 Make sure you have completed the [Terminal Setup](01-terminal.md) which includes Homebrew and Fish shell.
 
-## Runtime Environment
+## Mise (Java, Node.js, and More)
 
-### Mise Installation
+[mise](https://mise.jdx.dev/) is the single runtime manager for development tools. Use it instead of separate tools like jenv, fnm, or nvm.
 
 [mise](https://mise.jdwp.dev/) is a polyglot runtime version manager that handles Java, Node.js, Python, and many other languages.
 
 Install mise:
 ```bash
-curl https://mise.jdwp.dev/install.sh | sh
+brew install mise
 ```
 
-Add mise to your Fish config (update your `~/.config/fish/config.fish`):
-```fish
-# mise
-if type -q mise
-    mise activate fish | source
-end
-```
+Fish activation is handled in `~/.config/fish/config.fish` from the terminal setup.
 
-Or append it directly:
+### Install Global Runtime Versions
+
 ```bash
-echo '
-# mise
-if type -q mise
-    mise activate fish | source
-end' >> ~/.config/fish/config.fish
+# Java (Temurin)
+mise use --global java@temurin-21
+mise use --global java@temurin-17
+
+# Node.js
+mise use --global node@22
+mise use --global node@20
 ```
 
-## JDK
+### Per-project Runtime Versions
 
-### Install Java versions
-
-Once mise is installed and configured, install Java:
-```bash
-# Install specific versions
-mise install java@21
-mise install java@17
-mise install java@11
-
-# Set a global default
-mise use --global java@21
-
-# Verify
-java -version
-echo $JAVA_HOME
-```
-
-### Per-project Java version
-
-Create a `.mise.toml` file in your project:
-```toml
-[tools]
-java = "17"
-```
-
-Or use the command:
 ```bash
 cd /path/to/your/project
-mise use java@17
+
+# Creates/updates mise.toml in the current project
+mise use java@temurin-17 node@20
+
+# Install all versions declared in mise.toml
+mise install
 ```
 
 ### Verification
 
 ```bash
-# Check Java version
+mise --version
+mise ls
 java -version
+node -v
+npm -v
+```
 
-# Check JAVA_HOME
-echo $JAVA_HOME
+## Troubleshooting
+
+### Runtime command not found
+
+Reload fish:
+
+```bash
+source ~/.config/fish/config.fish
+```
+
+### Wrong runtime version in a project
+
+Verify active versions and local configuration:
+
+```bash
+mise current
+cat mise.toml
 ```
