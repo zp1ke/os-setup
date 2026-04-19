@@ -111,7 +111,31 @@ winget install Git.Git
 winget install jqlang.jq
 ```
 
-## 5. Configure PowerShell Profile
+## 5. Install Mise (Runtime Manager)
+
+Use `mise` to manage Java, Node.js, and other development runtimes instead of separate tools.
+
+```powershell
+powershell -ExecutionPolicy Bypass -c "irm https://mise.run/install.ps1 | iex"
+```
+
+Install global runtimes:
+
+```powershell
+mise use --global java@temurin-21
+mise use --global node@22
+mise install
+```
+
+Project runtimes:
+
+```powershell
+cd C:/path/to/project
+mise use java@temurin-17 node@20
+mise install
+```
+
+## 6. Configure PowerShell Profile
 
 Copy the provided PowerShell profile to `$PROFILE`:
 
@@ -120,7 +144,9 @@ New-Item -Path $PROFILE -Type File -Force
 cp windows/config/Microsoft.PowerShell_profile.ps1 $PROFILE
 ```
 
-## 6. Restart Terminal
+This profile already includes aliases/functions for eza and bat, zoxide integration, Starship initialization, and mise activation.
+
+## 7. Restart Terminal
 
 Close and reopen Microsoft Terminal to see the changes take effect.
 
@@ -139,112 +165,18 @@ Alternatively, PowerShell 7+ with Starship provides a modern, cross-platform she
 After setup, verify everything is working:
 
 ```powershell
-# Check versions
 starship --version
 eza --version
 bat --version
 zoxide --version
+mise --version
+mise ls
+java -version
+node -v
+npm -v
 
-# Test modern tools
-ls    # Should show icons (via eza)
-ll    # Detailed list with icons
-cat $PROFILE  # Should use bat with syntax highlighting
-wt    # Should launch Microsoft Terminal
-```
-
-## Install Mise (Runtime Manager)
-
-Use `mise` to manage Java, Node.js, and other development runtimes instead of separate tools.
-
-```powershell
-powershell -ExecutionPolicy Bypass -c "irm https://mise.run/install.ps1 | iex"
-```
-
-### Bat (Better `cat`)
-
-```powershell
-winget install sharkdp.bat
-```
-
-### Zoxide (Smarter `cd`)
-
-```powershell
-winget install ajeetdsouza.zoxide
-```
-
-### Ripgrep (Better `grep`)
-
-```powershell
-winget install BurntSushi.ripgrep.MSVC
-```
-
-### Fd (Better `find`)
-
-```powershell
-winget install sharkdp.fd
-```
-
-### Fzf (Fuzzy Finder)
-
-```powershell
-winget install fzf
-```
-
-### Additional Tools
-
-```powershell
-winget install Git.Git
-winget install jqlang.jq
-```
-
-## 5. Configure PowerShell Profile
-
-Copy the provided PowerShell profile to `$PROFILE`:
-
-```powershell
-Remove-Item Alias:ls -ErrorAction SilentlyContinue
-
-function ls {
-  eza --icons @args
-}
-
-function ll {
-  eza -l --icons @args
-}
-
-function la {
-  eza -la --icons @args
-}
-```
-
-## Install Mise (Runtime Manager)
-
-Use `mise` to manage Java, Node.js, and other development runtimes instead of separate tools.
-
-```powershell
-powershell -ExecutionPolicy Bypass -c "irm https://mise.run/install.ps1 | iex"
-```
-
-Add to PowerShell profile (`$PROFILE`):
-
-```powershell
-if (Test-Path "$HOME/.local/bin/mise.exe") {
-  $env:PATH = "$HOME/.local/bin;$env:PATH"
-  (& "$HOME/.local/bin/mise.exe" activate pwsh) | Out-String | Invoke-Expression
-}
-```
-
-Install global runtimes:
-
-```powershell
-mise use --global java@temurin-21
-mise use --global node@22
-```
-
-Project runtimes:
-
-```powershell
-cd C:/path/to/project
-mise use java@temurin-17 node@20
-mise install
+ls
+ll
+cat $PROFILE
+wt
 ```

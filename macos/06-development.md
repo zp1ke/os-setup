@@ -8,9 +8,7 @@ Make sure you have completed the [Terminal Setup](01-terminal.md) which includes
 
 ## Mise (Java, Node.js, and More)
 
-[mise](https://mise.jdx.dev/) is the single runtime manager for development tools. Use it instead of separate tools like jenv, fnm, or nvm.
-
-[mise](https://mise.jdwp.dev/) is a polyglot runtime version manager that handles Java, Node.js, Python, and many other languages.
+[mise](https://mise.jdx.dev/) is the single runtime manager for development tools. It handles Java, Node.js, Python, and many other languages.
 
 Install mise:
 ```bash

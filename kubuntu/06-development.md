@@ -39,30 +39,9 @@ ssh -T git@gitlab.com
 
 If you want KDE Wallet / GUI prompts integration (`ksshaskpass`), see the Fish section below.
 
-### JDK
+### Runtimes (Java, Node.js, and More)
 
-This setup uses [mise](https://mise.jdwp.dev/) for Java version management.
-
-#### Mise is installed globally
-
-Mise is installed and configured in the "Runtime Environment" section below. Java versions are managed through mise.
-
-#### Install Java versions
-
-Once mise is configured, install Java:
-```bash
-# Install a specific version
-mise install java@21
-mise install java@17
-mise install java@11
-
-# Set a global default
-mise use --global java@21
-
-# Verify
-java -version
-echo $JAVA_HOME
-```
+This setup uses [mise](https://mise.jdx.dev/) for runtime version management.
 
 ## Mise (Java, Node.js, and More)
 
@@ -73,7 +52,7 @@ Install mise:
 curl https://mise.run | sh
 ```
 
-Add to *.bash_dev*:
+If you use Bash, add to `.bash_dev`:
 ```bash
 # mise
 if [ -x "$HOME/.local/bin/mise" ]; then
@@ -81,10 +60,13 @@ if [ -x "$HOME/.local/bin/mise" ]; then
 fi
 ```
 
+If you use Fish (recommended in this repo), activation is shown in the Fish section below.
+
 Install global runtimes:
 ```shell
 mise use --global java@temurin-21
 mise use --global node@22
+mise install
 ```
 
 Project-specific runtimes:
@@ -120,20 +102,7 @@ Verify setup:
 flutter doctor
 ```
 
-## 2. Runtime Environment
-
-### Mise Installation
-
-[mise](https://mise.jdwp.dev/) is a polyglot runtime version manager that handles Java, Node.js, Python, and many other languages.
-
-Install mise:
-```bash
-curl https://mise.jdwp.dev/install.sh | sh
-```
-
-Shell configuration is in the Fish section below.
-
-## 3. Fish
+## 2. Fish
 
 Recommended for this setup (see [Terminal Setup](01-terminal.md)).
 
