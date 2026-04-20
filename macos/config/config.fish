@@ -70,6 +70,9 @@ alias update-system="brew update && brew upgrade && brew cleanup"
 set -gx EDITOR "code"
 set -gx VISUAL "code"
 
+# User local binaries
+fish_add_path $HOME/.local/bin
+
 # Homebrew
 fish_add_path /opt/homebrew/bin
 fish_add_path /opt/homebrew/sbin

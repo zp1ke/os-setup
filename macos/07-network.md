@@ -1,8 +1,17 @@
+# Network - macOS
+
+This guide covers OpenFortiVPN setup on macOS.
+
 ## OpenFortiVPN
 
 Install:
 ```shell
-sudo apt install openfortivpn
+brew install openfortivpn
+```
+
+Ensure *~/.local/bin* is in Fish PATH:
+```bash
+fish_add_path ~/.local/bin
 ```
 
 Create launcher script in *~/.local/bin* to use configuration from *PATH_TO_fortivpn.conf*:
