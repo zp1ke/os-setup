@@ -2,7 +2,7 @@
 
 This guide covers essential development tools for Kubuntu.
 
-Prerequisite: complete [Terminal Setup](01-terminal.md) (Fish + Konsole + Starship).
+Prerequisite: complete [Terminal Setup](01-terminal.md) (Fish + Ghostty + Starship).
 
 ## 1. Common (Shell-Agnostic)
 

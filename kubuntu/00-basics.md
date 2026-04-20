@@ -65,21 +65,21 @@ After changing, log out and log back in for full effect.
 - **Synchronizer**: Compare and sync directories
 - **Custom commands**: Add your own commands and scripts
 
-### Configure Konsole Integration
+### Configure Ghostty Integration
 
-Use Konsole as Krusader's external terminal:
+Use Ghostty as Krusader's external terminal:
 
 1. **Set External Terminal**:
    - Open Krusader → Settings → Configure Krusader
    - Go to General → Terminal
-   - Set external terminal to: `konsole`
+   - Set external terminal to: `ghostty`
 
 2. **Set Terminal Execution for User Actions**:
    - Go to Settings → Configure Krusader → User Actions
    - In the "Terminal execution" field, use:
 
    ```
-   konsole --noclose --workdir %d --title %t -e
+   ghostty --working-directory=%d --title=%t -e
    ```
 
 ### Tips

@@ -1,6 +1,6 @@
 # Terminal Setup - Kubuntu
 
-This guide uses KDE Konsole with Fish shell and Starship prompt, matching the same cross-platform workflow.
+This guide uses Ghostty with Fish shell and Starship prompt, matching the same cross-platform workflow.
 
 ## 1. Install Fonts
 
@@ -17,52 +17,31 @@ fc-cache -fv
 rm FiraCode.zip LICENSE README.md
 ```
 
-## 2. Configure Konsole
+## 2. Install and Configure Ghostty
 
-Konsole is the default terminal on Kubuntu. Ensure it is installed and set as the default terminal handler.
-
-```bash
-sudo apt update
-sudo apt install -y konsole
-
-# Keep Konsole as KDE's default terminal entry points (Plasma 6)
-kwriteconfig6 --file kdeglobals --group General --key TerminalApplication konsole
-kwriteconfig6 --file kdeglobals --group General --key TerminalService org.kde.konsole.desktop
-```
-
-### Create a Konsole profile (recommended defaults)
-
-Create a profile with these defaults:
-
-- Font: `FiraCode Nerd Font`
-- Font size: `14`
-- Initial size: `120x30`
-- Scrollback: `10000`
-- Shell: `fish`
+Ghostty is a fast, feature-rich terminal that automatically follows the KDE system light/dark theme.
 
 ```bash
-mkdir -p ~/.local/share/konsole
-cp config/konsole/Main.profile ~/.local/share/konsole/Main.profile
-
-# Make this profile the default
-kwriteconfig6 --file konsolerc --group Desktop Entry --key DefaultProfile Main.profile
+sudo snap install ghostty --classic
 ```
 
-### Match the remaining behavior in GUI
+### Set Ghostty as KDE's default terminal (Plasma 6)
 
-Konsole does not map every setting in a single file, so set these in Konsole UI:
+```bash
+kwriteconfig6 --file kdeglobals --group General --key TerminalApplication ghostty
+kwriteconfig6 --file kdeglobals --group General --key TerminalService com.mitchellh.ghostty.desktop
+```
 
-1. Open Konsole -> `Settings` -> `Edit Current Profile...`
-2. `Appearance`:
-    - Select a theme close to your preference (`Breeze`, `Breeze Dark`, or imported scheme)
-    - Set background transparency around `90%` (if compositor/transparency is enabled)
-3. `Tabs`:
-    - Keep tab bar visible to mirror always-on tab behavior
-4. `Scrolling`:
-    - Keep scrollbar visible
-    - Confirm scrollback is `10000`
+### Apply configuration
 
-Restart Konsole after creating/changing profiles.
+Copy the configuration file:
+
+```bash
+mkdir -p ~/.config/ghostty
+cp config/ghostty.conf ~/.config/ghostty/config.ghostty
+```
+
+The config uses `theme = "light:Catppuccin Latte,dark:Catppuccin Mocha"` so Ghostty automatically picks the right palette based on the KDE color scheme (light or dark).
 
 ## 3. Install Fish Shell
 

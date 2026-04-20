@@ -41,23 +41,6 @@ if [[ -n "$THEME_MODE" ]]; then
   kwriteconfig6 --file "$HOME/.config/kcminputrc" --group Mouse --key cursorTheme "$CURSOR_THEME"
   kwriteconfig6 --file "$HOME/.config/kcminputrc" --group Mouse --key cursorSize "$CURSOR_SIZE"
 
-  KONSOLE_COLOR_SCHEME="SolarizedLight"
-  if [[ "$THEME_MODE" == *"dark"* ]]; then
-    KONSOLE_COLOR_SCHEME="DarkPastels"
-  fi
-  # Persist color scheme for new Konsole windows by updating the default profile file
-  DEFAULT_PROFILE=$(kreadconfig6 --file "$HOME/.config/konsolerc" --group "Desktop Entry" --key DefaultProfile)
-  [[ -z "$DEFAULT_PROFILE" ]] && DEFAULT_PROFILE="Shell.profile"
-  PROFILE_FILE="$HOME/.local/share/konsole/$DEFAULT_PROFILE"
-  if [[ -f "$PROFILE_FILE" ]]; then
-    kwriteconfig6 --file "$PROFILE_FILE" --group Appearance --key ColorScheme "$KONSOLE_COLOR_SCHEME"
-  fi
-
-  # Also apply to the currently open Konsole (if any)
-  if command -v konsoleprofile >/dev/null 2>&1; then
-    konsoleprofile colors="$KONSOLE_COLOR_SCHEME" || true
-  fi
-
   # Set bat (batcat) theme
   BAT_THEME="OneHalfLight"
   if [[ "$THEME_MODE" == *"dark"* ]]; then
