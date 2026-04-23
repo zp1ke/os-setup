@@ -11,7 +11,10 @@
         "face": "JetBrainsMono Nerd Font",
         "size": 11
       },
-      "colorScheme": "One Half Light",
+      "colorScheme": {
+        "light": "One Half Light",
+        "dark": "One Half Dark"
+      },
       "opacity": 90,
       "useAcrylic": true,
       "padding": "10, 10, 10, 10",

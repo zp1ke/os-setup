@@ -39,11 +39,9 @@ The provided settings configure:
 - **120x30 startup size** for a readable workspace
 - **Padding and transparency** for aesthetics
 - **Longer scrollback** (3500 lines) for history
-- **System theme sync** (`"theme": "system"`) for Terminal UI chrome (tabs, app frame)
-- **Light terminal content** via `"colorScheme": "One Half Light"` in profile defaults
+- **System theme sync** (`"theme": "system"`) for both the Terminal UI chrome and profile color scheme
+- **Auto light/dark color scheme** via `"colorScheme": { "light": "One Half Light", "dark": "One Half Dark" }` in profile defaults
 - **Home directory as starting location** (instead of System32)
-
-Note: Windows Terminal does not currently auto-switch profile color schemes with OS theme. `"theme": "system"` affects app chrome, while terminal background/text colors come from `"colorScheme"`.
 
 If you prefer to lock app chrome to one appearance, set `"theme": "dark"` or `"theme": "light"` in `windows/config/windows-terminal.settings.json`.
 
