@@ -66,6 +66,12 @@ Use `mise` to manage Java, Node.js, and other developer runtimes instead of sepa
 brew install mise
 ```
 
+When configuring runtimes, also install `usage` for `mise` autocompletion:
+
+```bash
+mise use --global usage
+```
+
 ## 6. Install Nerd Fonts
 
 Required for icons in the terminal:

@@ -64,10 +64,13 @@ If you use Fish (recommended in this repo), activation is shown in the Fish sect
 
 Install global runtimes:
 ```shell
+mise use --global usage
 mise use --global java@temurin-21
 mise use --global node@22
 mise install
 ```
+
+`usage` is required for `mise` autocompletion.
 
 Project-specific runtimes:
 ```shell
@@ -135,4 +138,9 @@ if test -d $ANDROID_HOME
   fish_add_path --append $ANDROID_HOME/platform-tools
   fish_add_path --append $ANDROID_HOME/cmdline-tools/latest/bin
 end
+```
+
+If you see `Error: usage CLI not found. This is required for completions to work in mise.`, run:
+```shell
+mise use --global usage
 ```

@@ -58,6 +58,9 @@ Fish activation is handled in `~/.config/fish/config.fish` from the terminal set
 ### Install Global Runtime Versions
 
 ```bash
+# Required for mise autocompletion
+mise use --global usage
+
 # Java (Temurin)
 mise use --global java@temurin-21
 mise use --global java@temurin-17
@@ -66,6 +69,8 @@ mise use --global java@temurin-17
 mise use --global node@22
 mise use --global node@20
 ```
+
+`usage` is required for `mise` autocompletion.
 
 ### Per-project Runtime Versions
 
@@ -106,4 +111,12 @@ Verify active versions and local configuration:
 ```bash
 mise current
 cat mise.toml
+```
+
+### Error: usage CLI not found
+
+Install `usage` globally for mise:
+
+```bash
+mise use --global usage
 ```

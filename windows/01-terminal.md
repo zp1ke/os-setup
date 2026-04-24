@@ -126,10 +126,13 @@ powershell -ExecutionPolicy Bypass -c "irm https://mise.run/install.ps1 | iex"
 Install global runtimes:
 
 ```powershell
+mise use --global usage
 mise use --global java@temurin-21
 mise use --global node@22
 mise install
 ```
+
+`usage` is required for `mise` autocompletion.
 
 Project runtimes:
 
@@ -137,6 +140,12 @@ Project runtimes:
 cd C:/path/to/project
 mise use java@temurin-17 node@20
 mise install
+```
+
+If you see `Error: usage CLI not found. This is required for completions to work in mise.`, run:
+
+```powershell
+mise use --global usage
 ```
 
 ## 6. Configure PowerShell Profile
