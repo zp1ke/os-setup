@@ -6,9 +6,11 @@
 # ===================================
 # Starship prompt (requires PowerShell 7+)
 if ($PSVersionTable.PSVersion.Major -ge 7) {
-    Invoke-Expression (&starship init powershell)
-    # Set Starship config location
+    # Set config location before init so Starship reads the right file
     $ENV:STARSHIP_CONFIG = "$HOME\.config\starship.toml"
+    # Disable VS Code's built-in shell integration; Starship handles it natively
+    $ENV:VSCODE_SHELL_INTEGRATION = "0"
+    Invoke-Expression (&starship init powershell)
 } else {
     Write-Host "⚠️  Starship requires PowerShell 7+. You are using PowerShell $($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor)"
     Write-Host "   Install with: winget install Microsoft.PowerShell"
