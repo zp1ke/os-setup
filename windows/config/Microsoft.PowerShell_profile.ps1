@@ -66,6 +66,11 @@ if (Get-Module -ListAvailable -Name PSReadLine) {
     Set-PSReadLineOption -PredictionSource History
     Set-PSReadLineOption -PredictionViewStyle ListView
     Set-PSReadLineOption -EditMode Windows
+    Set-PSReadLineOption -Colors @{
+        InlinePrediction    = "`e[38;5;244m"
+        ListPrediction      = "`e[38;5;244m"
+        ListPredictionSelected = "`e[38;5;235;48;5;250m"
+    }
 }
 
 # ===================================
