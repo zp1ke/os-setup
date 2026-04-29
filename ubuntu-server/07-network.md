@@ -113,8 +113,10 @@ sudo systemctl restart ssh
 
 ## 4. Firewall Rule (Optional but Recommended)
 
+Allow SSH only from your local network subnet (replace `192.168.1.0/24` with your actual subnet):
+
 ```shell
-sudo ufw allow OpenSSH
+sudo ufw allow from 192.168.1.0/24 to any port 22
 sudo ufw enable
 sudo ufw status
 ```

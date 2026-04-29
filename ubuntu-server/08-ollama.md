@@ -150,6 +150,71 @@ gho "write a safe rsync command to back up /etc to /tmp/etc-backup"
 
 ---
 
+## Allow Ollama on Local Network
+
+By default, Ollama only listens on `localhost`. To make it accessible from other devices on the local network, configure it to bind to all interfaces and open the firewall port.
+
+### Bind Ollama to All Interfaces
+
+Create a systemd override to set the `OLLAMA_HOST` environment variable:
+
+```bash
+sudo TERM=xterm-256color systemctl edit ollama
+```
+
+> **Note:** If using Ghostty terminal, `sudo` may fail with `ncurses: cannot initialize terminal type ($TERM="xterm-ghostty")` because the ghostty terminfo entry is not in the system-wide terminfo database. Passing `TERM=xterm-256color` inline works around this.
+
+Add the following content:
+
+```ini
+[Service]
+Environment="OLLAMA_HOST=0.0.0.0"
+```
+
+Reload and restart the service:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+```
+
+Verify Ollama is now listening on all interfaces:
+
+```bash
+ss -tulpn | grep 11434
+```
+
+Expected output should show `*:11434` (all interfaces) instead of `127.0.0.1:11434`.
+
+### Open Firewall Port (UFW)
+
+Allow port `11434` only from your local network subnet (replace `192.168.1.0/24` with your actual subnet):
+
+```bash
+sudo ufw allow from 192.168.1.0/24 to any port 11434
+```
+
+Check the firewall rules:
+
+```bash
+sudo ufw status
+```
+
+### Test from Another Device
+
+From another machine on the same network, replace `<server-ip>` with the server's IP address:
+
+```bash
+curl http://<server-ip>:11434/api/generate \
+  -d '{
+    "model": "llama3.2:1b",
+    "prompt": "Say hello in one short sentence.",
+    "stream": false
+  }'
+```
+
+---
+
 ## Useful Commands
 
 Check available Ollama models:
