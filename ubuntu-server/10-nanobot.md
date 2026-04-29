@@ -1,8 +1,7 @@
-# Nanobot + Ollama Setup on Ubuntu Mini Server
+# Nanobot Setup on Ubuntu Mini Server
 
-This document describes the current local AI assistant setup using:
+This document describes the local Nanobot setup using:
 
-- Ollama
 - Nanobot
 - `llama3.2:1b`
 - Nanobot OpenAI-compatible API server
@@ -10,91 +9,11 @@ This document describes the current local AI assistant setup using:
 - systemd services
 - UFW LAN-only access rules
 
----
-
-## Ollama
-
-### Install Ollama
-
-Install Ollama:
-
-```bash
-curl -fsSL https://ollama.com/install.sh | sh
-```
-
-Enable and start the Ollama service:
-
-```bash
-sudo systemctl enable --now ollama
-```
-
-Check Ollama service status:
-
-```bash
-systemctl status ollama
-```
+Ollama installation and model setup are documented in `ubuntu-server/08-ollama.md`.
 
 ---
 
-### Install a Lightweight Model
-
-Pull the model:
-
-```bash
-ollama pull llama3.2:1b
-```
-
-Test the model interactively:
-
-```bash
-ollama run llama3.2:1b
-```
-
-Exit the interactive session with:
-
-```text
-/bye
-```
-
----
-
-### Test Ollama API
-
-Test Ollama’s native API:
-
-```bash
-curl http://localhost:11434/api/generate \
-  -d '{
-    "model": "llama3.2:1b",
-    "prompt": "Say hello in one short sentence.",
-    "stream": false
-  }'
-```
-
-Test Ollama’s OpenAI-compatible API:
-
-```bash
-curl http://localhost:11434/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer ollama" \
-  -d '{
-    "model": "llama3.2:1b",
-    "messages": [
-      {
-        "role": "user",
-        "content": "Say hello in one short sentence."
-      }
-    ]
-  }'
-```
-
-If both commands return valid responses, Ollama is working correctly.
-
----
-
-## Nanobot
-
-### Installation Context
+## Installation Context
 
 Nanobot is installed and running through:
 
@@ -148,7 +67,7 @@ cp ~/.nanobot/config.json ~/.nanobot/config.working.json
 
 ---
 
-### Network Configuration
+## Network Configuration
 
 Nanobot uses two services:
 
@@ -169,7 +88,7 @@ Do not expose Nanobot directly to the public internet.
 
 ---
 
-### Firewall Rules
+## Firewall Rules
 
 UFW is enabled.
 
@@ -203,7 +122,7 @@ SSH was also available through UFW. For better security, SSH can optionally be r
 
 ---
 
-### Manually Start Nanobot
+## Manually Start Nanobot
 
 Start the Nanobot API server:
 
@@ -234,7 +153,7 @@ or equivalent wildcard bindings.
 
 ---
 
-### Test Nanobot API Locally
+## Test Nanobot API Locally
 
 From the server:
 
@@ -256,7 +175,7 @@ curl http://127.0.0.1:8900/v1/chat/completions \
 
 ---
 
-### Test Nanobot API from LAN
+## Test Nanobot API from LAN
 
 From another device on the same network:
 
@@ -280,7 +199,7 @@ If this returns a model response, Nanobot is reachable over the LAN.
 
 ---
 
-### Create systemd Services
+## Create systemd Services
 
 Nanobot should run persistently using two systemd services:
 
@@ -342,7 +261,7 @@ as the working directory and home environment.
 
 ---
 
-### Enable and Start Services
+## Enable and Start Services
 
 Reload systemd:
 
@@ -377,7 +296,7 @@ ss -tulpn | grep -E '8900|18790'
 
 ---
 
-### Logs and Troubleshooting
+## Logs and Troubleshooting
 
 View Nanobot API logs:
 
@@ -408,27 +327,9 @@ sudo systemctl restart nanobot-serve.service
 sudo systemctl restart nanobot-gateway.service
 ```
 
-Restart Ollama:
-
-```bash
-sudo systemctl restart ollama
-```
-
 ---
 
-### Useful Commands
-
-Check available Ollama models:
-
-```bash
-ollama list
-```
-
-Check Ollama status:
-
-```bash
-systemctl status ollama
-```
+## Useful Commands
 
 Check Nanobot status:
 
@@ -445,7 +346,7 @@ nanobot --help
 Check ports:
 
 ```bash
-ss -tulpn | grep -E '11434|8900|18790'
+ss -tulpn | grep -E '8900|18790'
 ```
 
 Check firewall:
@@ -456,7 +357,71 @@ sudo ufw status numbered
 
 ---
 
-### Security Notes
+## Uninstall Nanobot
+
+Use this section to remove Nanobot while keeping Ollama available.
+
+Stop and disable Nanobot services:
+
+```bash
+sudo systemctl disable --now nanobot-gateway.service
+sudo systemctl disable --now nanobot-serve.service
+```
+
+Remove Nanobot service unit files:
+
+```bash
+sudo rm -f /etc/systemd/system/nanobot-serve.service
+sudo rm -f /etc/systemd/system/nanobot-gateway.service
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
+```
+
+Remove UFW rules for Nanobot ports:
+
+```bash
+sudo ufw status numbered
+sudo ufw delete <rule-number>
+sudo ufw status numbered
+```
+
+Delete rules for `8900/tcp` and `18790/tcp` from `192.168.100.0/24`.
+
+If Nanobot was installed with `uv tool`:
+
+```bash
+uv tool uninstall nanobot
+```
+
+If Nanobot was installed in a virtual environment, remove the environment directory.
+
+Optional backup:
+
+```bash
+cp -a ~/.nanobot ~/.nanobot.backup.$(date +%F)
+```
+
+Remove Nanobot config/cache data:
+
+```bash
+rm -rf ~/.nanobot
+```
+
+Verify Nanobot is no longer active:
+
+```bash
+systemctl status nanobot-serve.service --no-pager
+systemctl status nanobot-gateway.service --no-pager
+ss -tulpn | grep -E '8900|18790'
+```
+
+Expected result: no Nanobot listeners.
+
+To remove Ollama too, follow uninstall steps in `ubuntu-server/08-ollama.md`.
+
+---
+
+## Security Notes
 
 Nanobot is exposed only to the local network.
 
@@ -477,7 +442,7 @@ Important security reminders:
 
 ---
 
-### Current Working Stack
+## Current Working Stack
 
 Final working setup:
 
