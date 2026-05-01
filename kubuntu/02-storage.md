@@ -192,33 +192,35 @@ rclone check gdrive: ~/GoogleDrive
 2. Permissions: rclone only accesses what you authorized in OAuth.
 3. Optional encryption: create an rclone crypt remote later for encrypted uploads.
 
-## One service for both drives?
+## Sync workflow (not mount)
 
-Short answer: use two mount services, not one combined mount process.
+If you prefer local copies over live mounts, use `rclone sync`.
 
-1. `rclone mount` handles one remote per process.
-2. A single service that tries to launch both mounts is possible, but restart and failure handling is worse.
-3. Recommended: keep `rclone-gdrive.service` and `rclone-onedrive.service` separate.
+Sample scripts are available in this repo:
 
-If you want one command to manage both, create a systemd target:
+1. `kubuntu/scripts/rclone-sync-in.sh`
+2. `kubuntu/scripts/rclone-sync-out.sh`
 
-Create ~/.config/systemd/user/rclone-cloud-drives.target with:
-
-```ini
-[Unit]
-Description=Rclone Cloud Drives
-Wants=rclone-gdrive.service rclone-onedrive.service
-After=network-online.target
-
-[Install]
-WantedBy=default.target
-```
-
-Enable and start the target:
+Recommended local directory:
 
 ```shell
-systemctl --user daemon-reload
-systemctl --user enable rclone-cloud-drives.target
-systemctl --user start rclone-cloud-drives.target
-systemctl --user status rclone-cloud-drives.target
+mkdir -p ~/XDrive
 ```
+
+Example pull from cloud to local (`sync-in`):
+
+```shell
+rclone sync xdrive: ~/XDrive --progress
+```
+
+Example push local to cloud (`sync-out`):
+
+```shell
+rclone sync ~/XDrive xdrive: --progress
+```
+
+Notes:
+
+1. `sync` makes destination match source, including deletions.
+2. For a safer first run, add `--dry-run`.
+3. To protect against accidental deletes, add `--backup-dir ~/XDrive-backups/$(date +%F)` when syncing out.
